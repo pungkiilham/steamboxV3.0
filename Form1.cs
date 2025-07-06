@@ -184,6 +184,8 @@ namespace steamboxV3._0
         int[] mq_run = new int[31];
         string mqresep;
         string[] mq_resep = new string[31];
+        int[] mq_flag = new int[31];
+
 
         //publish
         string[] data_pub = new string[31];
@@ -263,7 +265,8 @@ namespace steamboxV3._0
                     mq_durasi[mqid] = mqdurasi;
                     mq_resep[mqid] = mqresep;
 
-                    mqrun_stop();
+                    mq_flag[mqid] = 1;
+                    //mqrun_stop();
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -280,6 +283,10 @@ namespace steamboxV3._0
                 catch (ArgumentOutOfRangeException)
                 {
                     richTextBox2.Invoke(new Action(() => richTextBox2.AppendText("NullReferenceException\n")));
+                }
+                catch (TimeoutException)
+                {
+                    richTextBox2.Invoke(new Action(() => richTextBox2.AppendText("TimeoutException\n")));
                 }
 
                 //richTextBox2.Invoke(new Action(() => richTextBox2.Text = value + "\n\n"));
@@ -387,9 +394,9 @@ namespace steamboxV3._0
 
         void mqrun_stop()
         {
-            ModClient.UnitIdentifier = id_sb;
-            status_buf = ModClient.ReadHoldingRegisters(flag_status, 4);
-            status_flag[id_sb] = status_buf[0];
+            //ModClient.UnitIdentifier = Convert.ToByte(id_sb);
+            //status_buf = ModClient.ReadHoldingRegisters(flag_status, 4);
+            //status_flag[id_sb] = status_buf[0];
 
 
             if (mq_run[id_sb] == 1 && status_flag[id_sb] == 1)
@@ -616,6 +623,16 @@ namespace steamboxV3._0
             }
         }
 
+        int[] dt_hour, dt_minute, dt_second;
+        DateTime date;
+
+        private void mulai_pemasakan()
+        {
+            date = DateTime.Now;
+            dt_hour[id_sb] = date.Hour;
+            dt_minute[id_sb] = date.Minute;
+            dt_second[id_sb] = date.Second;
+        }
         private void timer_pemasakan(int value, byte id)
         {
             value = count_pemasakan[id_sb] * (1000 / int.Parse(timer_tick));
@@ -749,8 +766,7 @@ namespace steamboxV3._0
         /****    Update GUI per Timer Tick     ****/
         //float a, b, c;
         int tim, tim1, tim2, next;
-        int[] dt_hour, dt_minute, dt_second;
-        DateTime date;
+
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -827,12 +843,15 @@ namespace steamboxV3._0
             try
             {
                 id_sb = 1;
-
                 readval_single();
                 //cek_al1h();
-                // mqrun_stop();
                 pemasakan_off();
 
+                if (mq_flag[id_sb] == 1)
+                {
+                    mqrun_stop();
+                    mq_flag[id_sb] = 0;
+                }
 
                 if (mq_resep[id_sb] == null)
                 {
@@ -848,19 +867,29 @@ namespace steamboxV3._0
                 //richTextBox3.AppendText("sb1.. " + id_sb + " Read AL1H" + al1h_val[id_sb] + "\n");
                 lbl_suhu1.Text = (pv_val[id_sb] / 10).ToString() + "." + (pv_val[id_sb] % 10).ToString();
 
-                //sb_aktif[id_sb] = 1;
-                btn_koneksi1.Text = "Connected";
-                btn_koneksi1.BackColor = Color.Green;
-                btn_status1.Enabled = true;
-                btn_status1.BackColor = Color.Green;
+                //cek koneksi sb
+                if (sb_aktif[id_sb] == 1)//if connected
+                {
+                    btn_koneksi1.Text = "Connected";
+                    btn_koneksi1.BackColor = Color.Green;
+                    btn_status1.Enabled = true;
+                    btn_status1.BackColor = Color.Green;
+                }
+                else if (sb_aktif[id_sb] == 0)//if dis connected
+                {
+                    btn_koneksi1.Text = "Disconnected";
+                    btn_koneksi1.BackColor = Color.Red;
+                    btn_status1.Enabled = false;
+                    btn_status1.BackColor = Color.Gray;
+                }
 
                 //cek status run / stop
-                if (status_flag[id_sb] == 1) //if stop
+                if (status_flag[id_sb] == 1 && sb_aktif[id_sb] == 1) //if stop
                 {
                     btn_status1.Text = "Run";
                     btn_status1.BackColor = Color.Green;
                 }
-                else if (status_flag[id_sb] == 0) //if run
+                else if (status_flag[id_sb] == 0 && sb_aktif[id_sb] == 1) //if run
                 {
                     btn_status1.Text = "Stop";
                     btn_status1.BackColor = Color.Red;
@@ -887,13 +916,17 @@ namespace steamboxV3._0
                 }
 
                 //cek suhu pemasakan && run count pemasakan
-                /*if (pv_val[id_sb] >= float.Parse(start_pemasakan) && status_flag[id_sb] == 0)
+                if (pv_val[id_sb] >= float.Parse(start_pemasakan) && status_flag[id_sb] == 0)
                 {
-                    count_pemasakan[id_sb]++;
-                    timer_pemasakan(count_pemasakan[id_sb], id_sb);
+                    mulai_pemasakan();
+                    lbl_pemasakan1.Text = dt_hour[id_sb] + " : " + dt_minute[id_sb] + " : " + dt_second[id_sb];
 
-                    lbl_pemasakan1.Text = pemasakan_time;
-                }*/
+
+                    //count_pemasakan[id_sb]++;
+                    //timer_pemasakan(count_pemasakan[id_sb], id_sb);
+
+                    //lbl_pemasakan1.Text = pemasakan_time;
+                }
             }
             catch (TimeoutException)
             {
@@ -915,11 +948,16 @@ namespace steamboxV3._0
             try
             {
                 id_sb = 2;
-
+                
                 readval_single();
                 //cek_al1h();
-                //mqrun_stop();
                 pemasakan_off();
+
+                if (mq_flag[id_sb] == 1)
+                {
+                    mqrun_stop();
+                    mq_flag[id_sb] = 0;
+                }
 
 
                 if (mq_resep[id_sb] == null)
@@ -938,19 +976,29 @@ namespace steamboxV3._0
                 //richTextBox3.AppendText("sb2.. " + id_sb + " Read AL1H" + al1h_val[id_sb] + "\n");
                 lbl_suhu2.Text = (pv_val[id_sb] / 10).ToString() + "." + (pv_val[id_sb] % 10).ToString();
 
-                //sb_aktif[id_sb] = 1;
-                btn_koneksi2.Text = "Connected";
-                btn_koneksi2.BackColor = Color.Green;
-                btn_status2.Enabled = true;
-                btn_status2.BackColor = Color.Green;
+                //cek koneksi sb
+                if (sb_aktif[id_sb] == 1)//if connected
+                {
+                    btn_koneksi2.Text = "Connected";
+                    btn_koneksi2.BackColor = Color.Green;
+                    btn_status2.Enabled = true;
+                    btn_status2.BackColor = Color.Green;
+                }
+                else if (sb_aktif[id_sb] == 0)//if dis connected
+                {
+                    btn_koneksi2.Text = "Disconnected";
+                    btn_koneksi2.BackColor = Color.Red;
+                    btn_status2.Enabled = false;
+                    btn_status2.BackColor = Color.Gray;
+                }
 
                 //cek status run / stop
-                if (status_flag[id_sb] == 1) //stop
+                if (status_flag[id_sb] == 1 && sb_aktif[id_sb] == 1) //stop
                 {
                     btn_status2.Text = "Run";
                     btn_status2.BackColor = Color.Green;
                 }
-                else if (status_flag[id_sb] == 0) //run
+                else if (status_flag[id_sb] == 0 && sb_aktif[id_sb] == 1) //run
                 {
                     btn_status2.Text = "Stop";
                     btn_status2.BackColor = Color.Red;
@@ -1004,8 +1052,13 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                //mqrun_stop();
                 pemasakan_off();
+
+                if (mq_flag[id_sb] == 1)
+                {
+                    mqrun_stop();
+                    mq_flag[id_sb] = 0;
+                }
 
                 if (mq_resep[id_sb] == null)
                 {
@@ -1021,19 +1074,29 @@ namespace steamboxV3._0
                 //richTextBox3.AppendText("sb2.. " + id_sb + " Read AL1H" + al1h_val[id_sb] + "\n");
                 lbl_suhu3.Text = (pv_val[id_sb] / 10).ToString() + "." + (pv_val[id_sb] % 10).ToString();
 
-                //sb_aktif[id_sb] = 1;
-                btn_koneksi3.Text = "Connected";
-                btn_koneksi3.BackColor = Color.Green;
-                btn_status3.Enabled = true;
-                btn_status3.BackColor = Color.Green;
+                //cek koneksi sb
+                if (sb_aktif[id_sb] == 1)//if connected
+                {
+                    btn_koneksi3.Text = "Connected";
+                    btn_koneksi3.BackColor = Color.Green;
+                    btn_status3.Enabled = true;
+                    btn_status3.BackColor = Color.Green;
+                }
+                else if (sb_aktif[id_sb] == 0)//if dis connected
+                {
+                    btn_koneksi3.Text = "Disconnected";
+                    btn_koneksi3.BackColor = Color.Red;
+                    btn_status3.Enabled = false;
+                    btn_status3.BackColor = Color.Gray;
+                }
 
                 //cek status run / stop
-                if (status_flag[id_sb] == 1) //stop
+                if (status_flag[id_sb] == 1 && sb_aktif[id_sb] == 1) //stop
                 {
                     btn_status3.Text = "Run";
                     btn_status3.BackColor = Color.Green;
                 }
-                else if (status_flag[id_sb] == 0) //run
+                else if (status_flag[id_sb] == 0 && sb_aktif[id_sb] == 1) //run
                 {
                     btn_status3.Text = "Stop";
                     btn_status3.BackColor = Color.Red;
@@ -1090,8 +1153,13 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
                 pemasakan_off();
+
+                if (mq_flag[id_sb] == 1)
+                {
+                    mqrun_stop();
+                    mq_flag[id_sb] = 0;
+                }
 
 
                 if (mq_resep[id_sb] == null)
@@ -1108,19 +1176,29 @@ namespace steamboxV3._0
                 //richTextBox3.AppendText("sb2.. " + id_sb + " Read AL1H" + al1h_val[id_sb] + "\n");
                 lbl_suhu4.Text = (pv_val[id_sb] / 10).ToString() + "." + (pv_val[id_sb] % 10).ToString();
 
-                //sb_aktif[id_sb] = 1;
-                btn_koneksi4.Text = "Connected";
-                btn_koneksi4.BackColor = Color.Green;
-                btn_status4.Enabled = true;
-                btn_status4.BackColor = Color.Green;
+                //cek koneksi sb
+                if (sb_aktif[id_sb] == 1)//if connected
+                {
+                    btn_koneksi4.Text = "Connected";
+                    btn_koneksi4.BackColor = Color.Green;
+                    btn_status4.Enabled = true;
+                    btn_status4.BackColor = Color.Green;
+                }
+                else if (sb_aktif[id_sb] == 0)//if dis connected
+                {
+                    btn_koneksi4.Text = "Disconnected";
+                    btn_koneksi4.BackColor = Color.Red;
+                    btn_status4.Enabled = false;
+                    btn_status4.BackColor = Color.Gray;
+                }
 
                 //cek status run / stop
-                if (status_flag[id_sb] == 1) //stop
+                if (status_flag[id_sb] == 1 && sb_aktif[id_sb] == 1) //stop
                 {
                     btn_status4.Text = "Run";
                     btn_status4.BackColor = Color.Green;
                 }
-                else if (status_flag[id_sb] == 0) //run
+                else if (status_flag[id_sb] == 0 && sb_aktif[id_sb] == 1) //run
                 {
                     btn_status4.Text = "Stop";
                     btn_status4.BackColor = Color.Red;
@@ -1177,8 +1255,13 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
                 pemasakan_off();
+
+                if (mq_flag[id_sb] == 1)
+                {
+                    mqrun_stop();
+                    mq_flag[id_sb] = 0;
+                }
 
 
                 if (mq_resep[id_sb] == null)
@@ -1264,8 +1347,13 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
                 pemasakan_off();
+
+                if (mq_flag[id_sb] == 1)
+                {
+                    mqrun_stop();
+                    mq_flag[id_sb] = 0;
+                }
 
 
                 if (mq_resep[id_sb] == null)
@@ -1351,7 +1439,7 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
+                //mqrun_stop();
                 pemasakan_off();
 
 
@@ -1438,7 +1526,7 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
+                //mqrun_stop();
                 pemasakan_off();
 
 
@@ -1525,7 +1613,7 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
+                //mqrun_stop();
                 pemasakan_off();
 
 
@@ -1612,7 +1700,7 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
+                //mqrun_stop();
                 pemasakan_off();
 
 
@@ -1699,7 +1787,7 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
+                //mqrun_stop();
                 pemasakan_off();
 
 
@@ -1786,7 +1874,7 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
+                //mqrun_stop();
                 pemasakan_off();
 
 
@@ -1872,7 +1960,7 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
+                //mqrun_stop();
                 pemasakan_off();
 
 
@@ -1958,7 +2046,7 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
+                //mqrun_stop();
                 pemasakan_off();
 
 
@@ -2044,7 +2132,7 @@ namespace steamboxV3._0
 
                 readval_single();
                 //cek_al1h();
-                mqrun_stop();
+                //mqrun_stop();
                 pemasakan_off();
 
 
