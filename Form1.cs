@@ -814,8 +814,8 @@ namespace steamboxV3._0
                 //cek suhu pemasakan && run count pemasakan
                 if (pv_val[i] >= float.Parse(start_pemasakan) && status_flag[i] == 0)
                 {
-                    count_pemasakan[i]++;
-                    timer_pemasakan(count_pemasakan[i], i);
+                    //count_pemasakan[i]++;
+                    //timer_pemasakan(count_pemasakan[i], i);
 
                     lbl_pemasakan1.Text = pemasakan_time;
                 }
