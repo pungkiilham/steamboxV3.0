@@ -377,6 +377,10 @@ namespace steamboxV3._0
                     mq_durasi[id_sb] = 0;
                     mq_resep[id_sb] = "-";
                     richTextBox1.Text = "run_stop >> RUN..." + id_sb + "\n\n";
+
+                    dt_hour[id_sb] = 0;
+                    dt_minute[id_sb] = 0;
+                    dt_second[id_sb] = 0;
                 }
                 else if (status_flag[id_sb] == 0)
                 {
@@ -422,6 +426,10 @@ namespace steamboxV3._0
             ModClient.WriteSingleRegister(addr_alarm, val_alarmOn);
             mq_run[id_sb] = 1;
 
+            dt_hour[id_sb] = 0;
+            dt_minute[id_sb] = 0;
+            dt_second[id_sb] = 0;
+
             //count_pemasakan[id_sb] = 0;
         }
 
@@ -432,6 +440,7 @@ namespace steamboxV3._0
             ModClient.WriteSingleRegister(addr_sv, val_sv);
             ModClient.WriteSingleRegister(addr_alarm, val_alarmOff);
             mq_run[id_sb] = 0;
+            date_flag[id_sb] = 0;
         }
 
         void scan_sb()
@@ -623,8 +632,12 @@ namespace steamboxV3._0
             }
         }
 
-        int[] dt_hour, dt_minute, dt_second;
+
+        int[] dt_hour = new int[31];
+        int[] dt_minute = new int[31];
+        int[] dt_second = new int[31];
         DateTime date;
+        byte[] date_flag = new byte[31];
 
         private void mulai_pemasakan()
         {
@@ -766,7 +779,6 @@ namespace steamboxV3._0
         /****    Update GUI per Timer Tick     ****/
         //float a, b, c;
         int tim, tim1, tim2, next;
-
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -916,16 +928,18 @@ namespace steamboxV3._0
                 }
 
                 //cek suhu pemasakan && run count pemasakan
-                if (pv_val[id_sb] >= float.Parse(start_pemasakan) && status_flag[id_sb] == 0)
+                if (dt_hour[id_sb] == 0 && dt_minute[id_sb] == 0 && dt_second[id_sb] == 0)
                 {
-                    mulai_pemasakan();
-                    lbl_pemasakan1.Text = dt_hour[id_sb] + " : " + dt_minute[id_sb] + " : " + dt_second[id_sb];
+                    if (pv_val[id_sb] >= float.Parse(start_pemasakan) && status_flag[id_sb] == 0)
+                    {
+                        mulai_pemasakan();
+                        lbl_pemasakan1.Text = dt_hour[id_sb] + " : " + dt_minute[id_sb] + " : " + dt_second[id_sb];
 
+                        //count_pemasakan[id_sb]++;
+                        //timer_pemasakan(count_pemasakan[id_sb], id_sb);
 
-                    //count_pemasakan[id_sb]++;
-                    //timer_pemasakan(count_pemasakan[id_sb], id_sb);
-
-                    //lbl_pemasakan1.Text = pemasakan_time;
+                        //lbl_pemasakan1.Text = pemasakan_time;
+                    }
                 }
             }
             catch (TimeoutException)
@@ -948,7 +962,7 @@ namespace steamboxV3._0
             try
             {
                 id_sb = 2;
-                
+
                 readval_single();
                 //cek_al1h();
                 pemasakan_off();
