@@ -98,6 +98,7 @@
             this.lbl_durasi4 = new System.Windows.Forms.Label();
             this.lbl_suhu4 = new System.Windows.Forms.Label();
             this.lbl_pemasakan4 = new System.Windows.Forms.Label();
+            this.lbl_resep4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.lbl_resep5 = new System.Windows.Forms.Label();
             this.lbl_durasi5 = new System.Windows.Forms.Label();
@@ -230,16 +231,14 @@
             this.lbl_suhu14 = new System.Windows.Forms.Label();
             this.lbl_pemasakan14 = new System.Windows.Forms.Label();
             this.lbl_resep14 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.btn_scanSb = new System.Windows.Forms.Button();
             this.richTextBox3 = new System.Windows.Forms.RichTextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.lbl_resep4 = new System.Windows.Forms.Label();
-            this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.richTextBox4 = new System.Windows.Forms.RichTextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.richTextBox_status = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -266,14 +265,15 @@
             // timer1
             // 
             this.timer1.Enabled = true;
+            this.timer1.Interval = 250;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Font = new System.Drawing.Font("Roboto", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(1447, 62);
+            this.richTextBox1.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox1.Location = new System.Drawing.Point(1417, 118);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(426, 379);
+            this.richTextBox1.Size = new System.Drawing.Size(456, 523);
             this.richTextBox1.TabIndex = 25;
             this.richTextBox1.Text = "Sistem Status: ";
             // 
@@ -290,7 +290,7 @@
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 79F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 115F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 115F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 157F));
             this.tableLayoutPanel4.Controls.Add(this.label29, 4, 0);
             this.tableLayoutPanel4.Controls.Add(this.label3, 5, 0);
             this.tableLayoutPanel4.Controls.Add(this.label4, 7, 0);
@@ -325,11 +325,11 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Roboto", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(376, 16);
+            this.label3.Location = new System.Drawing.Point(376, 17);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(55, 19);
+            this.label3.Size = new System.Drawing.Size(55, 18);
             this.label3.TabIndex = 34;
             this.label3.Text = "AL1.H";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -338,13 +338,13 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Roboto", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Roboto", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(516, 17);
+            this.label4.Location = new System.Drawing.Point(516, 11);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(109, 18);
+            this.label4.Size = new System.Drawing.Size(109, 30);
             this.label4.TabIndex = 32;
-            this.label4.Text = "Pemasakan";
+            this.label4.Text = "Pemasakan / \r\nWkt. Mulai";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label5
@@ -377,11 +377,11 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Roboto", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(148, 14);
+            this.label9.Location = new System.Drawing.Point(148, 16);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(83, 23);
+            this.label9.Size = new System.Drawing.Size(83, 19);
             this.label9.TabIndex = 28;
             this.label9.Text = "Koneksi";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -390,11 +390,11 @@
             // 
             this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Roboto", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(237, 14);
+            this.label16.Location = new System.Drawing.Point(237, 16);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(73, 23);
+            this.label16.Size = new System.Drawing.Size(73, 19);
             this.label16.TabIndex = 29;
             this.label16.Text = "Nozzle";
             this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -429,13 +429,13 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Roboto", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(631, 14);
+            this.label6.Location = new System.Drawing.Point(631, 7);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(109, 23);
+            this.label6.Size = new System.Drawing.Size(109, 38);
             this.label6.TabIndex = 31;
-            this.label6.Text = "Durasi";
+            this.label6.Text = "Durasi / \r\nWkt. Selesai\r\n";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel2
@@ -572,10 +572,10 @@
             // 
             this.lbl_durasi2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi2.AutoSize = true;
-            this.lbl_durasi2.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi2.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi2.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi2.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi2.Name = "lbl_durasi2";
-            this.lbl_durasi2.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi2.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi2.TabIndex = 16;
             this.lbl_durasi2.Text = "-";
             this.lbl_durasi2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -596,10 +596,10 @@
             // 
             this.lbl_pemasakan2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan2.AutoSize = true;
-            this.lbl_pemasakan2.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan2.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan2.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan2.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan2.Name = "lbl_pemasakan2";
-            this.lbl_pemasakan2.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan2.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan2.TabIndex = 17;
             this.lbl_pemasakan2.Text = "0 : 0 : 0";
             this.lbl_pemasakan2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -608,10 +608,10 @@
             // 
             this.lbl_resep2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep2.AutoSize = true;
-            this.lbl_resep2.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep2.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep2.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep2.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep2.Name = "lbl_resep2";
-            this.lbl_resep2.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep2.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep2.TabIndex = 15;
             this.lbl_resep2.Text = "-";
             this.lbl_resep2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -637,22 +637,22 @@
             this.label17.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label17.Location = new System.Drawing.Point(14, 68);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(71, 19);
+            this.label17.Size = new System.Drawing.Size(84, 19);
             this.label17.TabIndex = 71;
-            this.label17.Text = "Versi 3.0";
+            this.label17.Text = "Versi 3.1.2";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(498, 27);
+            this.textBox1.Location = new System.Drawing.Point(1447, 32);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(211, 31);
             this.textBox1.TabIndex = 72;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(724, 27);
+            this.button1.Location = new System.Drawing.Point(1674, 32);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 35);
             this.button1.TabIndex = 73;
@@ -671,15 +671,15 @@
             // richTextBox2
             // 
             this.richTextBox2.Font = new System.Drawing.Font("Roboto", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox2.Location = new System.Drawing.Point(918, 62);
+            this.richTextBox2.Location = new System.Drawing.Point(918, 310);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(483, 379);
+            this.richTextBox2.Size = new System.Drawing.Size(483, 331);
             this.richTextBox2.TabIndex = 76;
             this.richTextBox2.Text = "MOnitor mqtt in";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(198, 69);
+            this.button2.Location = new System.Drawing.Point(1782, 33);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(91, 35);
             this.button2.TabIndex = 77;
@@ -717,6 +717,7 @@
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(900, 44);
             this.tableLayoutPanel3.TabIndex = 78;
             // 
@@ -724,10 +725,10 @@
             // 
             this.lbl_resep1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep1.AutoSize = true;
-            this.lbl_resep1.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep1.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep1.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep1.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep1.Name = "lbl_resep1";
-            this.lbl_resep1.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep1.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep1.TabIndex = 15;
             this.lbl_resep1.Text = "-";
             this.lbl_resep1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -736,10 +737,10 @@
             // 
             this.lbl_durasi1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi1.AutoSize = true;
-            this.lbl_durasi1.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi1.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi1.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi1.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi1.Name = "lbl_durasi1";
-            this.lbl_durasi1.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi1.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi1.TabIndex = 16;
             this.lbl_durasi1.Text = "-";
             this.lbl_durasi1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -760,13 +761,13 @@
             // 
             this.lbl_pemasakan1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan1.AutoSize = true;
-            this.lbl_pemasakan1.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan1.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan1.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan1.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan1.Name = "lbl_pemasakan1";
-            this.lbl_pemasakan1.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan1.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan1.TabIndex = 17;
             this.lbl_pemasakan1.Text = "0 : 0 : 0";
-            this.lbl_pemasakan1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl_pemasakan1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
             // lbl_alh1
             // 
@@ -902,10 +903,10 @@
             // 
             this.lbl_resep3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep3.AutoSize = true;
-            this.lbl_resep3.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep3.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep3.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep3.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep3.Name = "lbl_resep3";
-            this.lbl_resep3.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep3.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep3.TabIndex = 15;
             this.lbl_resep3.Text = "-";
             this.lbl_resep3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -914,10 +915,10 @@
             // 
             this.lbl_durasi3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi3.AutoSize = true;
-            this.lbl_durasi3.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi3.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi3.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi3.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi3.Name = "lbl_durasi3";
-            this.lbl_durasi3.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi3.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi3.TabIndex = 16;
             this.lbl_durasi3.Text = "-";
             this.lbl_durasi3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -938,10 +939,10 @@
             // 
             this.lbl_pemasakan3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan3.AutoSize = true;
-            this.lbl_pemasakan3.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan3.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan3.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan3.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan3.Name = "lbl_pemasakan3";
-            this.lbl_pemasakan3.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan3.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan3.TabIndex = 17;
             this.lbl_pemasakan3.Text = "0 : 0 : 0";
             this.lbl_pemasakan3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1177,10 +1178,10 @@
             // 
             this.lbl_durasi4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi4.AutoSize = true;
-            this.lbl_durasi4.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi4.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi4.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi4.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi4.Name = "lbl_durasi4";
-            this.lbl_durasi4.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi4.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi4.TabIndex = 16;
             this.lbl_durasi4.Text = "-";
             this.lbl_durasi4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1201,13 +1202,25 @@
             // 
             this.lbl_pemasakan4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan4.AutoSize = true;
-            this.lbl_pemasakan4.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan4.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan4.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan4.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan4.Name = "lbl_pemasakan4";
-            this.lbl_pemasakan4.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan4.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan4.TabIndex = 17;
             this.lbl_pemasakan4.Text = "0 : 0 : 0";
             this.lbl_pemasakan4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbl_resep4
+            // 
+            this.lbl_resep4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_resep4.AutoSize = true;
+            this.lbl_resep4.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep4.Location = new System.Drawing.Point(747, 10);
+            this.lbl_resep4.Name = "lbl_resep4";
+            this.lbl_resep4.Size = new System.Drawing.Size(150, 23);
+            this.lbl_resep4.TabIndex = 15;
+            this.lbl_resep4.Text = "-";
+            this.lbl_resep4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel7
             // 
@@ -1246,10 +1259,10 @@
             // 
             this.lbl_resep5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep5.AutoSize = true;
-            this.lbl_resep5.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep5.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep5.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep5.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep5.Name = "lbl_resep5";
-            this.lbl_resep5.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep5.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep5.TabIndex = 15;
             this.lbl_resep5.Text = "-";
             this.lbl_resep5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1258,10 +1271,10 @@
             // 
             this.lbl_durasi5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi5.AutoSize = true;
-            this.lbl_durasi5.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi5.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi5.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi5.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi5.Name = "lbl_durasi5";
-            this.lbl_durasi5.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi5.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi5.TabIndex = 16;
             this.lbl_durasi5.Text = "-";
             this.lbl_durasi5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1282,10 +1295,10 @@
             // 
             this.lbl_pemasakan5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan5.AutoSize = true;
-            this.lbl_pemasakan5.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan5.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan5.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan5.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan5.Name = "lbl_pemasakan5";
-            this.lbl_pemasakan5.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan5.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan5.TabIndex = 17;
             this.lbl_pemasakan5.Text = "0 : 0 : 0";
             this.lbl_pemasakan5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1521,10 +1534,10 @@
             // 
             this.lbl_durasi6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi6.AutoSize = true;
-            this.lbl_durasi6.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi6.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi6.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi6.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi6.Name = "lbl_durasi6";
-            this.lbl_durasi6.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi6.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi6.TabIndex = 16;
             this.lbl_durasi6.Text = "-";
             this.lbl_durasi6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1545,10 +1558,10 @@
             // 
             this.lbl_pemasakan6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan6.AutoSize = true;
-            this.lbl_pemasakan6.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan6.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan6.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan6.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan6.Name = "lbl_pemasakan6";
-            this.lbl_pemasakan6.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan6.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan6.TabIndex = 17;
             this.lbl_pemasakan6.Text = "0 : 0 : 0";
             this.lbl_pemasakan6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1557,10 +1570,10 @@
             // 
             this.lbl_resep6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep6.AutoSize = true;
-            this.lbl_resep6.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep6.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep6.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep6.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep6.Name = "lbl_resep6";
-            this.lbl_resep6.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep6.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep6.TabIndex = 15;
             this.lbl_resep6.Text = "-";
             this.lbl_resep6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1602,10 +1615,10 @@
             // 
             this.lbl_resep11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep11.AutoSize = true;
-            this.lbl_resep11.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep11.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep11.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep11.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep11.Name = "lbl_resep11";
-            this.lbl_resep11.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep11.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep11.TabIndex = 15;
             this.lbl_resep11.Text = "-";
             this.lbl_resep11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1614,10 +1627,10 @@
             // 
             this.lbl_durasi11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi11.AutoSize = true;
-            this.lbl_durasi11.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi11.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi11.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi11.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi11.Name = "lbl_durasi11";
-            this.lbl_durasi11.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi11.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi11.TabIndex = 16;
             this.lbl_durasi11.Text = "-";
             this.lbl_durasi11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1638,10 +1651,10 @@
             // 
             this.lbl_pemasakan11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan11.AutoSize = true;
-            this.lbl_pemasakan11.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan11.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan11.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan11.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan11.Name = "lbl_pemasakan11";
-            this.lbl_pemasakan11.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan11.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan11.TabIndex = 17;
             this.lbl_pemasakan11.Text = "0 : 0 : 0";
             this.lbl_pemasakan11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1877,10 +1890,10 @@
             // 
             this.lbl_durasi12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi12.AutoSize = true;
-            this.lbl_durasi12.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi12.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi12.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi12.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi12.Name = "lbl_durasi12";
-            this.lbl_durasi12.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi12.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi12.TabIndex = 16;
             this.lbl_durasi12.Text = "-";
             this.lbl_durasi12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1901,10 +1914,10 @@
             // 
             this.lbl_pemasakan12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan12.AutoSize = true;
-            this.lbl_pemasakan12.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan12.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan12.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan12.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan12.Name = "lbl_pemasakan12";
-            this.lbl_pemasakan12.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan12.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan12.TabIndex = 17;
             this.lbl_pemasakan12.Text = "0 : 0 : 0";
             this.lbl_pemasakan12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1913,10 +1926,10 @@
             // 
             this.lbl_resep12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep12.AutoSize = true;
-            this.lbl_resep12.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep12.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep12.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep12.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep12.Name = "lbl_resep12";
-            this.lbl_resep12.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep12.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep12.TabIndex = 15;
             this.lbl_resep12.Text = "-";
             this.lbl_resep12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1958,10 +1971,10 @@
             // 
             this.lbl_resep9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep9.AutoSize = true;
-            this.lbl_resep9.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep9.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep9.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep9.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep9.Name = "lbl_resep9";
-            this.lbl_resep9.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep9.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep9.TabIndex = 15;
             this.lbl_resep9.Text = "-";
             this.lbl_resep9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1970,10 +1983,10 @@
             // 
             this.lbl_durasi9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi9.AutoSize = true;
-            this.lbl_durasi9.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi9.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi9.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi9.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi9.Name = "lbl_durasi9";
-            this.lbl_durasi9.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi9.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi9.TabIndex = 16;
             this.lbl_durasi9.Text = "-";
             this.lbl_durasi9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1994,10 +2007,10 @@
             // 
             this.lbl_pemasakan9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan9.AutoSize = true;
-            this.lbl_pemasakan9.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan9.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan9.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan9.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan9.Name = "lbl_pemasakan9";
-            this.lbl_pemasakan9.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan9.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan9.TabIndex = 17;
             this.lbl_pemasakan9.Text = "0 : 0 : 0";
             this.lbl_pemasakan9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2233,10 +2246,10 @@
             // 
             this.lbl_durasi10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi10.AutoSize = true;
-            this.lbl_durasi10.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi10.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi10.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi10.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi10.Name = "lbl_durasi10";
-            this.lbl_durasi10.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi10.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi10.TabIndex = 16;
             this.lbl_durasi10.Text = "-";
             this.lbl_durasi10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2257,10 +2270,10 @@
             // 
             this.lbl_pemasakan10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan10.AutoSize = true;
-            this.lbl_pemasakan10.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan10.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan10.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan10.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan10.Name = "lbl_pemasakan10";
-            this.lbl_pemasakan10.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan10.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan10.TabIndex = 17;
             this.lbl_pemasakan10.Text = "0 : 0 : 0";
             this.lbl_pemasakan10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2269,10 +2282,10 @@
             // 
             this.lbl_resep10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep10.AutoSize = true;
-            this.lbl_resep10.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep10.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep10.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep10.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep10.Name = "lbl_resep10";
-            this.lbl_resep10.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep10.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep10.TabIndex = 15;
             this.lbl_resep10.Text = "-";
             this.lbl_resep10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2314,10 +2327,10 @@
             // 
             this.lbl_resep7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep7.AutoSize = true;
-            this.lbl_resep7.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep7.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep7.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep7.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep7.Name = "lbl_resep7";
-            this.lbl_resep7.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep7.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep7.TabIndex = 15;
             this.lbl_resep7.Text = "-";
             this.lbl_resep7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2326,10 +2339,10 @@
             // 
             this.lbl_durasi7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi7.AutoSize = true;
-            this.lbl_durasi7.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi7.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi7.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi7.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi7.Name = "lbl_durasi7";
-            this.lbl_durasi7.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi7.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi7.TabIndex = 16;
             this.lbl_durasi7.Text = "-";
             this.lbl_durasi7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2350,10 +2363,10 @@
             // 
             this.lbl_pemasakan7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan7.AutoSize = true;
-            this.lbl_pemasakan7.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan7.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan7.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan7.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan7.Name = "lbl_pemasakan7";
-            this.lbl_pemasakan7.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan7.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan7.TabIndex = 17;
             this.lbl_pemasakan7.Text = "0 : 0 : 0";
             this.lbl_pemasakan7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2589,10 +2602,10 @@
             // 
             this.lbl_durasi8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi8.AutoSize = true;
-            this.lbl_durasi8.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi8.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi8.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi8.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi8.Name = "lbl_durasi8";
-            this.lbl_durasi8.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi8.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi8.TabIndex = 16;
             this.lbl_durasi8.Text = "-";
             this.lbl_durasi8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2613,10 +2626,10 @@
             // 
             this.lbl_pemasakan8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan8.AutoSize = true;
-            this.lbl_pemasakan8.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan8.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan8.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan8.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan8.Name = "lbl_pemasakan8";
-            this.lbl_pemasakan8.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan8.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan8.TabIndex = 17;
             this.lbl_pemasakan8.Text = "0 : 0 : 0";
             this.lbl_pemasakan8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2625,10 +2638,10 @@
             // 
             this.lbl_resep8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep8.AutoSize = true;
-            this.lbl_resep8.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep8.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep8.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep8.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep8.Name = "lbl_resep8";
-            this.lbl_resep8.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep8.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep8.TabIndex = 15;
             this.lbl_resep8.Text = "-";
             this.lbl_resep8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2670,10 +2683,10 @@
             // 
             this.lbl_resep15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep15.AutoSize = true;
-            this.lbl_resep15.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep15.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep15.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep15.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep15.Name = "lbl_resep15";
-            this.lbl_resep15.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep15.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep15.TabIndex = 15;
             this.lbl_resep15.Text = "-";
             this.lbl_resep15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2682,10 +2695,10 @@
             // 
             this.lbl_durasi15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi15.AutoSize = true;
-            this.lbl_durasi15.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi15.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi15.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi15.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi15.Name = "lbl_durasi15";
-            this.lbl_durasi15.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi15.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi15.TabIndex = 16;
             this.lbl_durasi15.Text = "-";
             this.lbl_durasi15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2706,10 +2719,10 @@
             // 
             this.lbl_pemasakan15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan15.AutoSize = true;
-            this.lbl_pemasakan15.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan15.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan15.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan15.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan15.Name = "lbl_pemasakan15";
-            this.lbl_pemasakan15.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan15.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan15.TabIndex = 17;
             this.lbl_pemasakan15.Text = "0 : 0 : 0";
             this.lbl_pemasakan15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2848,10 +2861,10 @@
             // 
             this.lbl_resep13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep13.AutoSize = true;
-            this.lbl_resep13.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep13.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep13.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep13.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep13.Name = "lbl_resep13";
-            this.lbl_resep13.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep13.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep13.TabIndex = 15;
             this.lbl_resep13.Text = "-";
             this.lbl_resep13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2860,10 +2873,10 @@
             // 
             this.lbl_durasi13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi13.AutoSize = true;
-            this.lbl_durasi13.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi13.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi13.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi13.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi13.Name = "lbl_durasi13";
-            this.lbl_durasi13.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi13.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi13.TabIndex = 16;
             this.lbl_durasi13.Text = "-";
             this.lbl_durasi13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2884,10 +2897,10 @@
             // 
             this.lbl_pemasakan13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan13.AutoSize = true;
-            this.lbl_pemasakan13.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan13.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan13.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan13.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan13.Name = "lbl_pemasakan13";
-            this.lbl_pemasakan13.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan13.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan13.TabIndex = 17;
             this.lbl_pemasakan13.Text = "0 : 0 : 0";
             this.lbl_pemasakan13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -3123,10 +3136,10 @@
             // 
             this.lbl_durasi14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_durasi14.AutoSize = true;
-            this.lbl_durasi14.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_durasi14.Location = new System.Drawing.Point(632, 9);
+            this.lbl_durasi14.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_durasi14.Location = new System.Drawing.Point(632, 13);
             this.lbl_durasi14.Name = "lbl_durasi14";
-            this.lbl_durasi14.Size = new System.Drawing.Size(109, 25);
+            this.lbl_durasi14.Size = new System.Drawing.Size(109, 18);
             this.lbl_durasi14.TabIndex = 16;
             this.lbl_durasi14.Text = "-";
             this.lbl_durasi14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -3147,10 +3160,10 @@
             // 
             this.lbl_pemasakan14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_pemasakan14.AutoSize = true;
-            this.lbl_pemasakan14.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pemasakan14.Location = new System.Drawing.Point(517, 9);
+            this.lbl_pemasakan14.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pemasakan14.Location = new System.Drawing.Point(517, 13);
             this.lbl_pemasakan14.Name = "lbl_pemasakan14";
-            this.lbl_pemasakan14.Size = new System.Drawing.Size(109, 25);
+            this.lbl_pemasakan14.Size = new System.Drawing.Size(109, 18);
             this.lbl_pemasakan14.TabIndex = 17;
             this.lbl_pemasakan14.Text = "0 : 0 : 0";
             this.lbl_pemasakan14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -3159,50 +3172,31 @@
             // 
             this.lbl_resep14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_resep14.AutoSize = true;
-            this.lbl_resep14.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep14.Location = new System.Drawing.Point(747, 9);
+            this.lbl_resep14.Font = new System.Drawing.Font("Roboto Cn", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_resep14.Location = new System.Drawing.Point(747, 10);
             this.lbl_resep14.Name = "lbl_resep14";
-            this.lbl_resep14.Size = new System.Drawing.Size(150, 25);
+            this.lbl_resep14.Size = new System.Drawing.Size(150, 23);
             this.lbl_resep14.TabIndex = 15;
             this.lbl_resep14.Text = "-";
             this.lbl_resep14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Roboto", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(817, 69);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 35);
-            this.label1.TabIndex = 93;
-            this.label1.Text = "000";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // timer2
-            // 
-            this.timer2.Enabled = true;
-            this.timer2.Interval = 10;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            // 
             // btn_scanSb
             // 
-            this.btn_scanSb.Font = new System.Drawing.Font("Roboto Cn", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_scanSb.Location = new System.Drawing.Point(101, 68);
+            this.btn_scanSb.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_scanSb.Location = new System.Drawing.Point(12, 96);
             this.btn_scanSb.Name = "btn_scanSb";
             this.btn_scanSb.Size = new System.Drawing.Size(91, 35);
             this.btn_scanSb.TabIndex = 94;
-            this.btn_scanSb.Text = "Scan SB";
+            this.btn_scanSb.Text = "Re-Scan SB";
             this.btn_scanSb.UseVisualStyleBackColor = true;
             this.btn_scanSb.Click += new System.EventHandler(this.btn_scanSb_Click);
             // 
             // richTextBox3
             // 
             this.richTextBox3.Font = new System.Drawing.Font("Roboto", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox3.Location = new System.Drawing.Point(1447, 562);
+            this.richTextBox3.Location = new System.Drawing.Point(1447, 697);
             this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(426, 379);
+            this.richTextBox3.Size = new System.Drawing.Size(426, 244);
             this.richTextBox3.TabIndex = 95;
             this.richTextBox3.Text = "CEK AL1H";
             // 
@@ -3212,11 +3206,11 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label10.Location = new System.Drawing.Point(914, 27);
+            this.label10.Location = new System.Drawing.Point(918, 286);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(114, 19);
+            this.label10.Size = new System.Drawing.Size(239, 19);
             this.label10.TabIndex = 96;
-            this.label10.Text = "Rich Textbox 2";
+            this.label10.Text = "Rich Textbox 2 - monitor mqtt in";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label11
@@ -3225,11 +3219,11 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label11.Location = new System.Drawing.Point(1443, 27);
+            this.label11.Location = new System.Drawing.Point(1413, 96);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(114, 19);
+            this.label11.Size = new System.Drawing.Size(228, 19);
             this.label11.TabIndex = 97;
-            this.label11.Text = "Rich Textbox 1";
+            this.label11.Text = "Rich Textbox 1 - system status";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label12
@@ -3238,43 +3232,42 @@
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label12.Location = new System.Drawing.Point(1443, 531);
+            this.label12.Location = new System.Drawing.Point(1443, 666);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(114, 19);
+            this.label12.Size = new System.Drawing.Size(196, 19);
             this.label12.TabIndex = 98;
-            this.label12.Text = "Rich Textbox 2";
+            this.label12.Text = "Rich Textbox 3 - cek ALH1";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label13
+            // richTextBox4
             // 
-            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Roboto", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label13.Location = new System.Drawing.Point(317, 100);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(66, 35);
-            this.label13.TabIndex = 99;
-            this.label13.Text = "000";
-            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.richTextBox4.Location = new System.Drawing.Point(918, 697);
+            this.richTextBox4.Name = "richTextBox4";
+            this.richTextBox4.Size = new System.Drawing.Size(483, 244);
+            this.richTextBox4.TabIndex = 100;
+            this.richTextBox4.Text = "";
             // 
-            // lbl_resep4
+            // label14
             // 
-            this.lbl_resep4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_resep4.AutoSize = true;
-            this.lbl_resep4.Font = new System.Drawing.Font("Roboto Cn", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_resep4.Location = new System.Drawing.Point(747, 9);
-            this.lbl_resep4.Name = "lbl_resep4";
-            this.lbl_resep4.Size = new System.Drawing.Size(150, 25);
-            this.lbl_resep4.TabIndex = 15;
-            this.lbl_resep4.Text = "-";
-            this.lbl_resep4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label14.Location = new System.Drawing.Point(914, 666);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(114, 19);
+            this.label14.TabIndex = 101;
+            this.label14.Text = "Rich Textbox 4";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // timer3
+            // richTextBox_status
             // 
-            this.timer3.Enabled = true;
-            this.timer3.Interval = 1000;
-            this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
+            this.richTextBox_status.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox_status.Location = new System.Drawing.Point(918, 27);
+            this.richTextBox_status.Name = "richTextBox_status";
+            this.richTextBox_status.Size = new System.Drawing.Size(327, 203);
+            this.richTextBox_status.TabIndex = 102;
+            this.richTextBox_status.Text = "Sistem Status: ";
             // 
             // Form1
             // 
@@ -3282,13 +3275,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(1884, 964);
-            this.Controls.Add(this.label13);
+            this.Controls.Add(this.richTextBox_status);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.richTextBox4);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.richTextBox3);
             this.Controls.Add(this.btn_scanSb);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.tableLayoutPanel15);
             this.Controls.Add(this.tableLayoutPanel17);
             this.Controls.Add(this.tableLayoutPanel33);
@@ -3559,16 +3553,15 @@
         private System.Windows.Forms.Label lbl_suhu14;
         private System.Windows.Forms.Label lbl_pemasakan14;
         private System.Windows.Forms.Label lbl_resep14;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Button btn_scanSb;
         private System.Windows.Forms.RichTextBox richTextBox3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label lbl_resep4;
-        private System.Windows.Forms.Timer timer3;
+        private System.Windows.Forms.RichTextBox richTextBox4;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.RichTextBox richTextBox_status;
     }
 }
 

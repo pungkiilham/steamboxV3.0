@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 using System.IO.Ports;
 using EasyModbus;
 using System.Configuration;
@@ -30,6 +31,12 @@ namespace steamboxV3._0
 
         public MqttClient mqClient;
 
+        // VERSION INFO (single source of truth).
+        // NOTE: keep app_version + changelog_id in sync with UPDATE_LOG.md and AssemblyInfo.cs
+        // (AssemblyVersion / AssemblyFileVersion) every time you release a new build.
+        const string app_version = "3.1.2";    // matches the top UPDATE_LOG.md entry ID
+        const string changelog_id = "2026-08-08"; // date of that changelog entry
+
         public Form1()
         {
             InitializeComponent();
@@ -43,7 +50,10 @@ namespace steamboxV3._0
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            // NOTE (VERSION): show app version + last build time on the version label (label17).
+            // Build time is read from the exe file's write date so it always matches the actual build,
+            // even on copied client-PC folders.
+            label17.Text = "Versi " + app_version + " · Build " + File.GetLastWriteTime(Application.ExecutablePath).ToString("dd/MM/yyyy HH:mm");
         }
 
         private void Form1_Closing(object sender, FormClosingEventArgs e)
@@ -88,6 +98,10 @@ namespace steamboxV3._0
         // app.config
         string comport, baudrate, timeout;
         string ip, port, id, user, pass;
+        // NOTE: MQTT client ID. Overridable via App.config key `mqtt_clientid`
+        // (defaults to `id` for backward compatibility). A unique ID per machine
+        // prevents two instances from kicking each other off the same broker.
+        string mqttClientId;
         string start_pemasakan, selisih_pemasakan, sv_on, alarm_on, alarm_off, timer_tick;
         // string active_ids; // Removed
         // List<int> active_id_list = new List<int>(); // Removed
@@ -105,6 +119,11 @@ namespace steamboxV3._0
             id = ConfigurationManager.AppSettings["id"].ToString();
             user = ConfigurationManager.AppSettings["user"].ToString();
             pass = ConfigurationManager.AppSettings["pass"].ToString();
+
+            // NOTE (FIX): MQTT client ID is now configurable. If `mqtt_clientid` is missing/empty,
+            // fall back to the legacy `id` so existing deployments keep working unchanged.
+            mqttClientId = ConfigurationManager.AppSettings["mqtt_clientid"];
+            if (string.IsNullOrEmpty(mqttClientId)) mqttClientId = id;
 
             start_pemasakan = ConfigurationManager.AppSettings["start_pemasakan"].ToString();
             selisih_pemasakan = ConfigurationManager.AppSettings["selisih_pemasakan"].ToString();
@@ -127,14 +146,27 @@ namespace steamboxV3._0
             richTextBox_status.AppendText("SV: " + (val_sv / 10) + "\n");
             richTextBox_status.AppendText("AL1.h => Run: " + (val_alarmOn / 10) + ", Stop: " + (val_alarmOff / 10) + "\n\n");
 
+            // NOTE (VERSION): longer build detail shown in the Sistem Status window.
+            // Assembly version comes from AssemblyInfo.cs (bump together with app_version/changelog_id).
+            Version asmVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            richTextBox_status.AppendText("Build Info:\n");
+            richTextBox_status.AppendText("  Versi      : " + app_version + "\n");
+            richTextBox_status.AppendText("  Changelog  : " + changelog_id + " (see UPDATE_LOG.md)\n");
+            richTextBox_status.AppendText("  Build Time : " + File.GetLastWriteTime(Application.ExecutablePath).ToString("dd/MM/yyyy HH:mm:ss") + "\n");
+            richTextBox_status.AppendText("  Assembly   : " + asmVer + "\n\n");
+
             try
             {
                 mqClient = new MqttClient(ip, 1884, false, null, null, MqttSslProtocols.TLSv1_2);
-                mqClient.Connect(id, user, pass);
+                mqClient.Connect(mqttClientId, user, pass);
 
                 if (mqClient.IsConnected)
                 {
                     richTextBox_status.AppendText("MQTT_Server Connected\n");
+
+                    // NOTE (FIX): hook the connection-lost event so we can auto-reconnect
+                    // after the PC restarts / the broker drops the session.
+                    mqClient.ConnectionClosed += MqttClient_ConnectionClosed;
 
                     mqtt_sub();
                 }
@@ -220,12 +252,66 @@ namespace steamboxV3._0
             mqClient.Subscribe(topic, msg);
         }
 
+        // NOTE (FIX): MQTT auto-reconnect. When the broker drops the connection (e.g. after a
+        // PC restart / network blip), M2Mqtt raises ConnectionClosed. We create a fresh client
+        // (a closed M2Mqtt client cannot be reused), reconnect with backoff, and resubscribe sb/req.
+        private bool isMqttReconnecting = false;
+
+        private async void MqttClient_ConnectionClosed(object sender, EventArgs e)
+        {
+            if (isMqttReconnecting) return;
+            isMqttReconnecting = true;
+
+            try
+            {
+                this.Invoke(new Action(() =>
+                    richTextBox_status.AppendText("MQTT_Server Connection Lost, reconnecting...\n")));
+
+                for (int attempt = 1; attempt <= 5; attempt++)
+                {
+                    try
+                    {
+                        MqttClient newClient = new MqttClient(ip, 1884, false, null, null, MqttSslProtocols.TLSv1_2);
+                        newClient.Connect(mqttClientId, user, pass);
+
+                        if (newClient.IsConnected)
+                        {
+                            newClient.ConnectionClosed += MqttClient_ConnectionClosed;
+                            mqClient = newClient;
+                            mqtt_sub();
+
+                            this.Invoke(new Action(() =>
+                                richTextBox_status.AppendText("MQTT_Server Reconnected\n")));
+                            return;
+                        }
+                    }
+                    catch (MqttConnectionException) { }
+
+                    await Task.Delay(3000); // backoff between attempts
+                }
+
+                this.Invoke(new Action(() =>
+                    richTextBox_status.AppendText("MQTT_Server Reconnect Failed (5 attempts)\n")));
+            }
+            catch (Exception ex)
+            {
+                this.Invoke(new Action(() =>
+                    richTextBox_status.AppendText("MQTT Reconnect Error: " + ex.Message + "\n")));
+            }
+            finally
+            {
+                isMqttReconnecting = false;
+            }
+        }
+
         public void mqtt_pub()
         {
             if (mqClient.IsConnected)
             {
                 data = "[";
-                for (byte i = 1; i < data_pub.Length; i++)
+                // NOTE (FIX): loop was `i < data_pub.Length` (1..30) which published 30 units.
+                // Bound to sbmax (1..15) so the publish JSON matches the actual steambox count on site.
+                for (byte i = 1; i < sbmax; i++)
                 {
                     run_pub[i] = mq_run[i];
                     temp_pub[i] = pv_val[i] / 10;
@@ -237,7 +323,7 @@ namespace steamboxV3._0
                     data_pub[i] = "{\"id\": " + i + ",\"run\": " + run_pub[i] + ",\"temp\": " + tempnon + "." + tempdes + ",\"com\": " + com_pub[i] + "}";
 
                     data = data + data_pub[i];
-                    if (i < (data_pub.Length - 1))
+                    if (i < (sbmax - 1))
                     {
                         data = data + ",";
                     }
@@ -400,12 +486,17 @@ namespace steamboxV3._0
                             }
                             else if (status_flag[currentId] == 0)
                             {
+                                // Capture before stop() clears mq_resep/mq_durasi, so the log shows the real recipe.
+                                string logResep = mq_resep[currentId];
+                                int logDurasi = mq_durasi[currentId];
+
                                 stop(currentId);
                                 mq_run[currentId] = 0;
                                 this.Invoke(new Action(() =>
                                 {
                                     richTextBox1.Text = "run_stop >> STOP..." + currentId + "\n\n";
-                                    richTextBox3.AppendText("run_stop.. " + currentId + " Resep: " + mq_resep[currentId] + " Durasi: " + mq_resep[currentId] + "\n");
+                                    // NOTE (FIX): previously this logged mq_resep for BOTH resep and durasi.
+                                    richTextBox3.AppendText("run_stop.. " + currentId + " Resep: " + logResep + " Durasi: " + logDurasi + "\n");
                                 }));
                             }
                         }
@@ -472,9 +563,13 @@ namespace steamboxV3._0
             }
             mq_run[id] = 0;
 
-            // Reset cooking timer when stopped
-            // start_time_pemasakan[id] = DateTime.MinValue;
-            // pemasakan_time_strings[id] = "00 : 00 : 00";
+            // NOTE (FIX): When a unit stops (GUI button, MQTT command, or pemasakan_off force-stop),
+            // clear the last recipe/duration so the labels do NOT keep showing the previous batch.
+            // This was reported as "resep and durasi filled from previously".
+            // The pemasakan (elapsed cooking time) label is intentionally left as-is on stop;
+            // it is reset on the next start inside run().
+            mq_resep[id] = "-";
+            mq_durasi[id] = 0;
         }
 
         async void scan_sb()
