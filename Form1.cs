@@ -34,7 +34,7 @@ namespace steamboxV3._0
         // VERSION INFO (single source of truth).
         // NOTE: keep app_version + changelog_id in sync with UPDATE_LOG.md and AssemblyInfo.cs
         // (AssemblyVersion / AssemblyFileVersion) every time you release a new build.
-        const string app_version = "3.1.2";    // matches the top UPDATE_LOG.md entry ID
+        const string app_version = "3.2.0";    // matches the top UPDATE_LOG.md entry ID
         const string changelog_id = "2026-08-08"; // date of that changelog entry
 
         public Form1()
@@ -44,8 +44,8 @@ namespace steamboxV3._0
             bacaPort();
             mqtt_sub();
 
-            // Initialize UI Arrays for the 15 Steamboxes
-            InitializeUIArrays(15);
+            // Initialize UI Arrays for the 30 Steamboxes
+            InitializeUIArrays(30);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -64,37 +64,6 @@ namespace steamboxV3._0
         }
 
 
-        //button trial kondisi
-        private void button1_Click(object sender, EventArgs e) //send / publish mqtt
-        {
-            if (mqClient.IsConnected)
-            {
-                mqClient.Publish(topic_pub, Encoding.UTF8.GetBytes(textBox1.Text));
-                textBox1.Text = "mqtt pub sukses";
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            for (byte i = 2; i < 4; i++)
-            {
-                if (sb_aktif[i] == 1)
-                {
-                    try
-                    {
-                        ModClient.UnitIdentifier = i;
-                        ModClient.WriteSingleRegister(addr_alarm, 20);
-                        ModClient.WriteSingleRegister(addr_sv, 100);
-                    }
-                    catch (TimeoutException)
-                    {
-                        richTextBox1.AppendText("button2_Click TimeoutException ..." + i + "\n\n");
-                    }
-                }
-            }
-        }
-
-
         // app.config
         string comport, baudrate, timeout;
         string ip, port, id, user, pass;
@@ -103,6 +72,7 @@ namespace steamboxV3._0
         // prevents two instances from kicking each other off the same broker.
         string mqttClientId;
         string start_pemasakan, selisih_pemasakan, sv_on, alarm_on, alarm_off, timer_tick;
+        int scan_timeout_ms = 100;
         // string active_ids; // Removed
         // List<int> active_id_list = new List<int>(); // Removed
         int[] skip_counter = new int[31];
@@ -113,6 +83,7 @@ namespace steamboxV3._0
             comport = ConfigurationManager.AppSettings["comport"].ToString();
             baudrate = ConfigurationManager.AppSettings["baudrate"].ToString();
             timeout = ConfigurationManager.AppSettings["timeout"].ToString();
+            if (!int.TryParse(ConfigurationManager.AppSettings["scan_timeout"], out scan_timeout_ms) || scan_timeout_ms <= 0) scan_timeout_ms = 100;
 
             ip = ConfigurationManager.AppSettings["ip"].ToString();
             port = ConfigurationManager.AppSettings["port"].ToString();
@@ -333,7 +304,6 @@ namespace steamboxV3._0
                 this.Invoke(new Action(() =>
                 {
                     richTextBox2.Text = $"mqtt_pub()... [TICK] { DateTime.Now:HH: mm: ss}\n\n" + data;
-                    textBox1.Text = "mqtt pub sukses";
                 }));
                 data = "";
             }
@@ -421,7 +391,7 @@ namespace steamboxV3._0
         //addr write value -> write single register
         byte id_sb, addr_run = 50, addr_alarm = 54, addr_sv = 0;
         int val_run = 0, val_stop = 1, val_alarmOn, val_alarmOff, val_sv;
-        byte sbmax = 16;
+        byte sbmax = 31;   // 30 steambox units: loop bounds are 1..30 (i < sbmax)
 
         //buffer read modbus (ALL SB)
         int[] status_buf = new int[31];
@@ -509,6 +479,24 @@ namespace steamboxV3._0
             }
         }
 
+        void hb_append(string text)
+        {
+            const int maxLines = 10;
+            List<string> data = new List<string>();
+            foreach (string l in richTextBox4.Text.Split('\n'))
+            {
+                if (string.IsNullOrEmpty(l) || l.Trim() == "Heartbeat Log:") continue;
+                data.Add(l);
+            }
+            foreach (string l in text.Split('\n'))
+            {
+                if (string.IsNullOrEmpty(l)) continue;
+                data.Add(l);
+            }
+            if (data.Count > maxLines) data.RemoveRange(0, data.Count - maxLines);
+            richTextBox4.Text = "Heartbeat Log:\n" + string.Join("\n", data) + "\n";
+        }
+
         void mqrun_stop(byte id)
         {
             if (mq_run[id] == 1 && status_flag[id] == 1)
@@ -518,7 +506,7 @@ namespace steamboxV3._0
                 this.Invoke(new Action(() =>
                 {
                     richTextBox2.AppendText(mq_run[id] + "mqrun ok.....\n");
-                    richTextBox4.Text = "SB_" + id + "\nMQTT_State: " + mq_run[id].ToString() + "\nMQ Run ok.....\n";
+                    hb_append("SB_" + id + "\nMQTT_State: " + mq_run[id].ToString() + "\nMQ Run ok.....");
                 }));
             }
             else if (mq_run[id] == 0 && status_flag[id] == 0)
@@ -527,7 +515,7 @@ namespace steamboxV3._0
                 this.Invoke(new Action(() =>
                 {
                     richTextBox2.AppendText(mq_run[id] + "mqstop ok...\n");
-                    richTextBox4.Text = "SB_" + id + "\nMQTT_State: " + mq_run[id].ToString() + "\nMQ Stop ok.....\n";
+                    hb_append("SB_" + id + "\nMQTT_State: " + mq_run[id].ToString() + "\nMQ Stop ok.....");
                 }));
             }
         } //run/stop via web app
@@ -577,44 +565,59 @@ namespace steamboxV3._0
             await Task.Run(() =>
             {
                 string foundIds = "";
-                for (byte i = 1; i < sbmax; i++)
+                lock (modbusLock)
                 {
+                    // Lower the read timeout while probing so absent units are
+                    // detected fast; restore the original value afterwards.
+                    int origTimeout = ModClient.ConnectionTimeout;
                     try
                     {
-                        lock (modbusLock)
-                        {
-                            System.Threading.Thread.Sleep(50);
-                            ModClient.UnitIdentifier = i;
-
-                            // Try to read status to confirm presence using original 4-reg pattern
-                            ModClient.ReadHoldingRegisters(50, 4);
-                            sb_aktif[i] = 1;
-                            foundIds += i + " ";
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        sb_aktif[i] = 0;
-                        sb_connected[i] = false;
-
-                        // Hard Reset on scan failure to clear bus for next ID
-                        lock (modbusLock)
+                        ModClient.ConnectionTimeout = scan_timeout_ms;
+                        for (byte i = 1; i < sbmax; i++)
                         {
                             try
                             {
-                                if (ModClient.Connected) ModClient.Disconnect();
-                                System.Threading.Thread.Sleep(100);
-                                ModClient.Connect();
+                                System.Threading.Thread.Sleep(10);
+                                ModClient.UnitIdentifier = i;
+
+                                // Try to read status to confirm presence using original 4-reg pattern
+                                ModClient.ReadHoldingRegisters(50, 4);
+                                sb_aktif[i] = 1;
+                                foundIds += i + " ";
                             }
-                            catch { }
+                            catch (Exception ex)
+                            {
+                                sb_aktif[i] = 0;
+                                sb_connected[i] = false;
+
+                                // A timeout means the unit simply did not answer, so the line
+                                // is quiet and there is nothing to clear. Only reconnect on a
+                                // real bus error (CRC/garbage/port) to clear residual noise.
+                                if (ex is System.TimeoutException)
+                                {
+                                    System.Threading.Thread.Sleep(10);
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        if (ModClient.Connected) ModClient.Disconnect();
+                                        System.Threading.Thread.Sleep(20);
+                                        ModClient.Connect();
+                                    }
+                                    catch { }
+                                }
+                            }
                         }
-                        System.Threading.Thread.Sleep(50);
+                    }
+                    finally
+                    {
+                        ModClient.ConnectionTimeout = origTimeout;
                     }
                 }
                 this.Invoke(new Action(() =>
                 {
-                    if (richTextBox4.Text.Length > 5000) richTextBox4.Text = "Heartbeat Log:\n";
-                    richTextBox4.AppendText($"[SCAN] {DateTime.Now:HH:mm:ss} | Found: {foundIds}\n");
+                    hb_append($"[SCAN] {DateTime.Now:HH:mm:ss} | Found: {foundIds}");
                 }));
             });
 
@@ -737,80 +740,13 @@ namespace steamboxV3._0
             btn_scanSb.Enabled = true;
             isScanning = false;
         }
-        private void btn_status1_Click(object sender, EventArgs e)
+        // Shared Run/Stop handler for all 30 steambox units.
+        // Each btn_statusN button carries its unit id in its Tag (set in the Designer).
+        private void btn_status_Click(object sender, EventArgs e)
         {
-            id_sb = 1;
-            run_stop();
-        }
-        private void btn_status2_Click(object sender, EventArgs e)
-        {
-            id_sb = 2;
-            run_stop();
-        }
-        private void btn_status3_Click(object sender, EventArgs e)
-        {
-            id_sb = 3;
-            run_stop();
-        }
-        private void btn_status4_Click(object sender, EventArgs e)
-        {
-            id_sb = 4;
-            run_stop();
-        }
-        private void btn_status5_Click(object sender, EventArgs e)
-        {
-            id_sb = 5;
-            run_stop();
-        }
-        private void btn_status6_Click(object sender, EventArgs e)
-        {
-            id_sb = 6;
-            run_stop();
-        }
-        private void btn_status7_Click(object sender, EventArgs e)
-        {
-            id_sb = 7;
-            run_stop();
-        }
-        private void btn_status8_Click(object sender, EventArgs e)
-        {
-            id_sb = 8;
-            run_stop();
-        }
-        private void btn_status9_Click(object sender, EventArgs e)
-        {
-            id_sb = 9;
-            run_stop();
-        }
-        private void btn_status10_Click(object sender, EventArgs e)
-        {
-            id_sb = 10;
-            run_stop();
-        }
-        private void btn_status11_Click(object sender, EventArgs e)
-        {
-            id_sb = 11;
-            run_stop();
-        }
-
-        private void btn_status12_Click(object sender, EventArgs e)
-        {
-            id_sb = 12;
-            run_stop();
-        }
-        private void btn_status13_Click(object sender, EventArgs e)
-        {
-            id_sb = 13;
-            run_stop();
-        }
-        private void btn_status14_Click(object sender, EventArgs e)
-        {
-            id_sb = 14;
-            run_stop();
-        }
-        private void btn_status15_Click(object sender, EventArgs e)
-        {
-            id_sb = 15;
+            Button btn = sender as Button;
+            if (btn == null || btn.Tag == null) return;
+            id_sb = (byte)(int)btn.Tag;
             run_stop();
         }
 
@@ -855,8 +791,7 @@ namespace steamboxV3._0
 
                         this.Invoke(new Action(() =>
                         {
-                            if (richTextBox4.Text.Length > 5000) richTextBox4.Text = "Heartbeat Log:\n";
-                            richTextBox4.AppendText($"[TICK] {DateTime.Now:HH:mm:ss} | Poll Cycle Complete\n");
+                            hb_append($"[TICK] {DateTime.Now:HH:mm:ss} | Poll Cycle Complete");
                         }));
 
                         mqtt_pub();

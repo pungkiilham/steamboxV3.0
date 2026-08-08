@@ -10,6 +10,72 @@ Update log for tracking changes to steamboxV3.0. Add new entries at the TOP of t
 
 ---
 
+## 2026-08-08 — v3.2.0 — 30-steambox HMI layout: 2 racks × 15, top log tabs, shared Run/Stop handler
+
+### 1. Grid now supports all 30 steambox units (`Form1.Designer.cs` + `Form1.cs`)
+- **What:** the unit grid was expanded from 15 to **30 rows**, arranged as **2 racks × 15** so all
+  units are visible at a glance (HMI-style). Rack A = SB 1–15 (left), Rack B = SB 16–30 (right),
+  each with its own RoyalBlue column-header row. Rows are 38 px tall and alternate
+  `Lavender` / `(245,245,255)` backgrounds.
+- **Why:** the final installation has 30 steamboxes; the old fixed 15-row layout could not show them.
+- **How:** all 30 row panels (`tableLayoutPanelSB1..30`) and their `lbl_*1..30` / `btn_*1..30`
+  controls are declared in the Designer; `InitializeUIArrays(30)` and `sbmax = 31` pick them up so
+  polling, scanning, MQTT publish, and UI updates all cover IDs 1–30.
+- **Form size:** `ClientSize` is **1920 × 964** (same height as the pre-3.2.0 build) so it fits a
+  24"/1080p monitor; the whole 30-unit grid is always visible without scrolling.
+
+### 2. Log windows moved to a top TabControl (`Form1.Designer.cs`)
+- **What:** the 4 logs now live in a `TabControl` positioned at the **top-right** (900 × 210 at
+  `(924, 14)`, above Rack B / SB 16–30) with tabs "Sistem Status" (`richTextBox_status`),
+  "System Error" (`richTextBox1`), "MQTT Traffic" (`richTextBox2`), "Action" (`richTextBox3`),
+  and "Heartbeat" (`richTextBox4`). The app title (`label15`), version (`label17`), and Scan
+  button (`btn_scanSb`) sit in the **top-left** (above Rack A / SB 1–15). The old right-side
+  labels (`label10/11/12/14`) were removed and the logs are `ReadOnly`.
+- **Why:** keeps the app title and the log tabs in the header band while giving the full form
+  width/height to the 30-unit grid (top row = title left + tabs right; bottom row = SB 1–15 and
+  SB 16–30 side by side), still short enough for 1080p.
+
+### 3. Removed debug controls (`Form1.Designer.cs` + `Form1.cs`)
+- **What:** deleted `textBox1`, `button1` (MQTT publish test), `button2` (AL1H writer),
+  `splitter1`, and their `button1_Click` / `button2_Click` handlers.
+- **Why:** dev leftovers that clutter a production HMI screen.
+
+### 4. Shared Run/Stop handler (`Form1.Designer.cs` + `Form1.cs`)
+- **What:** all 30 `btn_statusN` buttons now wire to a single `btn_status_Click` handler that reads
+  the unit id from the button `Tag`. The 15 per-unit `btn_status1..15_Click` handlers were removed.
+- **Why:** same behavior, no per-unit boilerplate for the doubled row count.
+
+### 5. Form width trimmed to fit content (`Form1.Designer.cs`)
+- **What:** `ClientSize` width reduced from **1920 → 1836** px. Content (title/tab, racks, headers)
+  ends at X = 1824, so the ~96 px dead strip on the right edge is gone.
+- **Why:** unused empty space on a fixed-size HMI screen.
+
+### 6. Heartbeat log capped to the last 10 rows (`Form1.cs`)
+- **What:** new `hb_append()` helper keeps the "Heartbeat Log:" header plus at most the **last 10**
+  data lines. New entries push the oldest off the top (ring-buffer style). All heartbeat writes
+  (`[SCAN]`, `[TICK]`, MQTT run/stop blocks) now go through it.
+- **Why:** previously the log could grow until a 5000-char reset; a fixed 10-row window keeps the
+  heartbeat tab readable at a glance.
+
+### 7. Faster steambox rescan (`Form1.cs` + `App.config`)
+- **What:** `scan_sb()` probe speed-up:
+  - read timeout lowered to `scan_timeout` (new App.config key, default **100 ms**) during the scan,
+    restored to 250 ms afterwards (in `try/finally`);
+  - per-ID fixed delay cut `Sleep(50)` → `Sleep(10)` (Modbus RTU only needs ~4 ms gap at 9600 baud);
+  - **absent** units (no answer → `System.TimeoutException`) no longer trigger a disconnect/reconnect
+    — the line is quiet, nothing to clear — so an inactive unit costs ~110 ms instead of ~460 ms;
+  - the disconnect+`Sleep(20)`+reconnect bus reset is kept only for real bus errors
+    (CRC/garbage/port-not-open);
+  - the whole loop now holds `modbusLock` once (run/stop buttons are briefly unresponsive during a
+    scan — a startup/button action).
+- **Why:** a typical mixed rescan took ~8 s and an all-off scan ~13–15 s; now ~2–3 s / ~3.5 s.
+
+### 8. Version bump
+- `app_version` / `changelog_id` (`Form1.cs`), `AssemblyVersion` / `AssemblyFileVersion`
+  (`Properties/AssemblyInfo.cs`), and `UPDATE_LOG.md` heading bumped to **3.2.0**.
+
+---
+
 ## 2026-08-08 — v3.1.2 — FIX: stale resep/durasi + MQTT robustness + version info
 
 ### 5. Version / build info on the UI (`Form1.cs` + `Properties/AssemblyInfo.cs` + this file)

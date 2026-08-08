@@ -1,6 +1,26 @@
-# AGENTS.md — steamboxV3.0
+# AGENTS.md — steamboxV3.0 (VIBE SANDBOX)
 
 Context file for AI agents working on this repository.
+
+## Repo Roles & Workflow (IMPORTANT)
+
+This folder (`steamboxV3.0-vibe`) is the **VIBE SANDBOX** — an independent git clone of the original
+project, checked out on its own **`vibe-coding` branch** that exists only on GitHub (pushed as a
+separate branch; the original `master` is untouched).
+
+- **Original:** `D:\Project lain-lain\Project MVP-Demo\CSharp\steamboxV3.0` — branch `master`, the
+  released app. Changes here are treated as production.
+- **Vibe (this folder):** `D:\Project lain-lain\Project MVP-Demo\CSharp\steamboxV3.0-vibe` — branch
+  `vibe-coding`. Use this folder to prototype / experiment freely. Nothing here touches `master`.
+- **Workflow:** do all experimental work in THIS vibe folder on `vibe-coding`. When an experiment is
+  approved, promote the specific change to the original repo (`git cherry-pick` / manual apply) and
+  bump the version there. Never rewrite the original's history.
+- **Sync point:** both repos currently sit at the same commit `b6d053a` (v3.1.2). `origin` for this
+  clone points at the same GitHub repo (`pungkiilham/steamboxV3.0`), so `git push origin vibe-coding`
+  keeps the sandbox branch on GitHub.
+- **README/warnings:** all project facts below describe the shared codebase and apply to both repos
+  unless noted. Build time is read from the exe write timestamp, so the sandbox build shows its own
+  build time — this is expected.
 
 ## Project Overview
 
