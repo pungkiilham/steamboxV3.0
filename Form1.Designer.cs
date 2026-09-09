@@ -49,6 +49,7 @@
             this.btn_reconnect = new System.Windows.Forms.Button();
             this.lbl_scan_info = new System.Windows.Forms.Label();
             this.lbl_reconnect_info = new System.Windows.Forms.Label();
+            this.lbl_status = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -6394,6 +6395,17 @@
             this.lbl_reconnect_info.TabIndex = 102;
             this.lbl_reconnect_info.Text = "Coba koneksi ulang ke server MQTT";
             // 
+            // lbl_status
+            // 
+            this.lbl_status.AutoSize = true;
+            this.lbl_status.Font = new System.Drawing.Font("Roboto", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_status.ForeColor = System.Drawing.Color.Red;
+            this.lbl_status.Location = new System.Drawing.Point(12, 148);
+            this.lbl_status.Name = "lbl_status";
+            this.lbl_status.Size = new System.Drawing.Size(120, 18);
+            this.lbl_status.TabIndex = 103;
+            this.lbl_status.Text = "";
+            // 
             // richTextBox_status
             // 
             this.richTextBox_status.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -6513,6 +6525,7 @@
             this.Controls.Add(this.btn_reconnect);
             this.Controls.Add(this.lbl_scan_info);
             this.Controls.Add(this.lbl_reconnect_info);
+            this.Controls.Add(this.lbl_status);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.tableLayoutPanelHdr2);
@@ -6644,6 +6657,7 @@
         private System.Windows.Forms.Button btn_reconnect;
         private System.Windows.Forms.Label lbl_scan_info;
         private System.Windows.Forms.Label lbl_reconnect_info;
+        private System.Windows.Forms.Label lbl_status;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

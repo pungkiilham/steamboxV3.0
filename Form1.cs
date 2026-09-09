@@ -113,18 +113,12 @@ namespace steamboxV3._0
             richTextBox3.Text = "Action Log:\n";
             richTextBox4.Text = "Heartbeat Log:\n";
 
-            richTextBox_status.AppendText("\nCOM PORT: " + comport + "\n");
-            richTextBox_status.AppendText("SV: " + (val_sv / 10) + "\n");
-            richTextBox_status.AppendText("AL1.h => Run: " + (val_alarmOn / 10) + ", Stop: " + (val_alarmOff / 10) + "\n\n");
-
-            // NOTE (VERSION): longer build detail shown in the Sistem Status window.
-            // Assembly version comes from AssemblyInfo.cs (bump together with app_version/changelog_id).
-            Version asmVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            richTextBox_status.AppendText("Build Info:\n");
-            richTextBox_status.AppendText("  Versi      : " + app_version + "\n");
-            richTextBox_status.AppendText("  Changelog  : " + changelog_id + " (see UPDATE_LOG.md)\n");
-            richTextBox_status.AppendText("  Build Time : " + File.GetLastWriteTime(Application.ExecutablePath).ToString("dd/MM/yyyy HH:mm:ss") + "\n");
-            richTextBox_status.AppendText("  Assembly   : " + asmVer + "\n\n");
+            sb_append("Build Info:");
+            sb_append("  Versi      : " + app_version);
+            sb_append("  Build Time : " + File.GetLastWriteTime(Application.ExecutablePath).ToString("dd/MM/yyyy HH:mm:ss"));
+            sb_append("COM PORT: " + comport);
+            sb_append("SV: " + (val_sv / 10));
+            sb_append("AL1.h => Run: " + (val_alarmOn / 10) + ", Stop: " + (val_alarmOff / 10));
 
             try
             {
@@ -133,7 +127,7 @@ namespace steamboxV3._0
 
                 if (mqClient.IsConnected)
                 {
-                    richTextBox_status.AppendText("MQTT_Server Connected\n");
+                    lbl_status.Text = "MQTT terhubung";
 
                     // NOTE (FIX): hook the connection-lost event so we can auto-reconnect
                     // after the PC restarts / the broker drops the session.
@@ -145,7 +139,7 @@ namespace steamboxV3._0
             }
             catch (MqttConnectionException)
             {
-                richTextBox_status.AppendText("MQTT_Server Not Detected\n");
+                lbl_status.Text = "MQTT tidak terdeteksi";
             }
 
             for (byte i = 1; i < data_pub.Length; i++)
@@ -177,12 +171,12 @@ namespace steamboxV3._0
             {
                 ModClient.Connect();
                 timer1.Start();
-                richTextBox_status.AppendText("Modbus_Client Connected\n");
+                sb_append("Modbus_Client Connected");
                 scan_sb();
             }
             catch (System.IO.IOException e)
             {
-                richTextBox_status.AppendText("Modbus_Client Not Detected\n");
+                sb_append("Modbus_Client Not Detected");
                 timer1.Stop();
             }
 
@@ -236,7 +230,7 @@ namespace steamboxV3._0
             try
             {
                 this.Invoke(new Action(() =>
-                    richTextBox_status.AppendText("MQTT_Server Connection Lost, reconnecting...\n")));
+                    lbl_status.Text = "MQTT koneksi terputus, mencoba..."));
 
                 for (int attempt = 1; attempt <= 5; attempt++)
                 {
@@ -252,7 +246,7 @@ namespace steamboxV3._0
                             mqtt_sub();
 
                             this.Invoke(new Action(() =>
-                                richTextBox_status.AppendText("MQTT_Server Reconnected\n")));
+                                lbl_status.Text = "MQTT terhubung kembali"));
                             return;
                         }
                     }
@@ -262,12 +256,12 @@ namespace steamboxV3._0
                 }
 
                 this.Invoke(new Action(() =>
-                    richTextBox_status.AppendText("MQTT_Server Reconnect Failed (5 attempts)\n")));
+                    lbl_status.Text = "MQTT gagal (5 percobaan)"));
             }
             catch (Exception ex)
             {
                 this.Invoke(new Action(() =>
-                    richTextBox_status.AppendText("MQTT Reconnect Error: " + ex.Message + "\n")));
+                    lbl_status.Text = "MQTT error: " + ex.Message));
             }
             finally
             {
@@ -495,6 +489,24 @@ namespace steamboxV3._0
             }
             if (data.Count > maxLines) data.RemoveRange(0, data.Count - maxLines);
             richTextBox4.Text = "Heartbeat Log:\n" + string.Join("\n", data) + "\n";
+        }
+
+        void sb_append(string text)
+        {
+            const int maxLines = 15;
+            List<string> data = new List<string>();
+            foreach (string l in richTextBox_status.Text.Split('\n'))
+            {
+                if (string.IsNullOrEmpty(l) || l.Trim() == "Sistem Status:") continue;
+                data.Add(l);
+            }
+            foreach (string l in text.Split('\n'))
+            {
+                if (string.IsNullOrEmpty(l)) continue;
+                data.Add(l);
+            }
+            if (data.Count > maxLines) data.RemoveRange(0, data.Count - maxLines);
+            richTextBox_status.Text = "Sistem Status:\n" + string.Join("\n", data) + "\n";
         }
 
         void mqrun_stop(byte id)
@@ -735,7 +747,7 @@ namespace steamboxV3._0
             isScanning = true;
             btn_scanSb.Enabled = false;
             btn_reconnect.Enabled = false;
-            richTextBox_status.AppendText("Sedang scan SB...\n");
+            lbl_status.Text = "Sedang scan SB...";
 
             await Task.Run(() => scan_sb());
 
@@ -751,7 +763,7 @@ namespace steamboxV3._0
             isReconnecting = true;
             btn_scanSb.Enabled = false;
             btn_reconnect.Enabled = false;
-            richTextBox_status.AppendText("Sedang reconnect ke server MQTT...\n");
+            lbl_status.Text = "Sedang reconnect ke server MQTT...";
 
             try { if (mqClient != null && mqClient.IsConnected) mqClient.Disconnect(); } catch { }
             mqClient = null;
@@ -768,23 +780,23 @@ namespace steamboxV3._0
                         mqClient.ConnectionClosed += MqttClient_ConnectionClosed;
                         mqtt_sub();
                         this.Invoke(new Action(() =>
-                            richTextBox_status.AppendText("MQTT_Server Connected\n")));
+                            lbl_status.Text = "MQTT terhubung"));
                     }
                     else
                     {
                         this.Invoke(new Action(() =>
-                            richTextBox_status.AppendText("MQTT_Server Gagal Koneksi\n")));
+                            lbl_status.Text = "MQTT gagal koneksi"));
                     }
                 }
                 catch (MqttConnectionException)
                 {
                     this.Invoke(new Action(() =>
-                        richTextBox_status.AppendText("MQTT_Server Tidak Terjangkau\n")));
+                        lbl_status.Text = "MQTT tidak terjangkau"));
                 }
                 catch (Exception ex)
                 {
                     this.Invoke(new Action(() =>
-                        richTextBox_status.AppendText("MQTT_Server Error: " + ex.Message + "\n")));
+                        lbl_status.Text = "MQTT error: " + ex.Message));
                 }
             });
 
