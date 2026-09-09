@@ -113,17 +113,14 @@ namespace steamboxV3._0
             richTextBox3.Text = "Action Log:\n";
             richTextBox4.Text = "Heartbeat Log:\n";
 
-            richTextBox_status.Text = "Sistem Status:\n";
-            sb_append("Build Info:");
-            sb_append("  Versi      : " + app_version);
-            sb_append("  Build Time : " + File.GetLastWriteTime(Application.ExecutablePath).ToString("dd/MM/yyyy HH:mm:ss"));
-            sb_append("");
-            sb_append("Sistem Info:");
-            sb_append("  COM PORT   : " + comport);
-            sb_append("  SV         : " + (val_sv / 10));
-            sb_append("  AL1.h Run  : " + (val_alarmOn / 10) + " | Stop: " + (val_alarmOff / 10));
-            sb_append("  Modbus     : " + (ModClient.Connected ? "Connected" : "Not Detected"));
-            sb_append("  MQTT       : " + (mqClient != null && mqClient.IsConnected ? "Connected" : "Not Detected"));
+            richTextBox_status.Text = "Versi      : " + app_version + " - " + File.GetLastWriteTime(Application.ExecutablePath).ToString("dd/MM/yyyy HH:mm:ss") + "\n\n" +
+                "Sistem Info:\n" +
+                "  COM PORT   : " + comport + "\n" +
+                "  SV         : " + (val_sv / 10) + "\n" +
+                "  AL1.h Run  : " + (val_alarmOn / 10) + " | Stop: " + (val_alarmOff / 10) + "\n" +
+                "  Modbus     : Not Detected\n" +
+                "  MQTT       : Not Detected\n\n" +
+                "Retry Koneksi:\n";
 
             try
             {
@@ -133,7 +130,7 @@ namespace steamboxV3._0
                 if (mqClient.IsConnected)
                 {
                     lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung";
-                    sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung");
+                    retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung");
                     // NOTE (FIX): hook the connection-lost event so we can auto-reconnect
                     // after the PC restarts / the broker drops the session.
                     mqClient.ConnectionClosed += MqttClient_ConnectionClosed;
@@ -145,7 +142,7 @@ namespace steamboxV3._0
             catch (MqttConnectionException)
             {
                 lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terdeteksi";
-                sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terdeteksi");
+                retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terdeteksi");
             }
 
             for (byte i = 1; i < data_pub.Length; i++)
@@ -177,12 +174,12 @@ namespace steamboxV3._0
             {
                 ModClient.Connect();
                 timer1.Start();
-                sb_append("Modbus_Client Connected");
+                retry_append("Modbus_Client Connected");
                 scan_sb();
             }
             catch (System.IO.IOException e)
             {
-                sb_append("Modbus_Client Not Detected");
+                retry_append("Modbus_Client Not Detected");
                 timer1.Stop();
             }
 
@@ -237,7 +234,7 @@ namespace steamboxV3._0
             {
                 this.Invoke(new Action(() => {
                     lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT koneksi terputus, mencoba...";
-                    sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT koneksi terputus, mencoba...");
+                    retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT reconnecting...");
                 }));
 
                 for (int attempt = 1; attempt <= 5; attempt++)
@@ -255,7 +252,7 @@ namespace steamboxV3._0
 
                             this.Invoke(new Action(() => {
                                 lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung kembali";
-                                sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung kembali");
+                                retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung");
                             }));
                             return;
                         }
@@ -267,7 +264,7 @@ namespace steamboxV3._0
 
                 this.Invoke(new Action(() => {
                     lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal (5 percobaan)";
-                    sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal (5 percobaan)");
+                    retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal (5x)");
                 }));
             }
             catch (Exception ex)
@@ -518,7 +515,27 @@ namespace steamboxV3._0
                 data.Add(l);
             }
             if (data.Count > maxLines) data.RemoveRange(0, data.Count - maxLines);
-            richTextBox_status.Text = "Sistem Status:\n" + string.Join("\n", data) + "\n";
+            richTextBox_status.Text = string.Join("\n", data) + "\n";
+        }
+
+        // Retry Koneksi section: max 4 rows, new events replace oldest
+        List<string> retryLines = new List<string>();
+        void retry_append(string text)
+        {
+            const int maxRetry = 4;
+            retryLines.Add(text);
+            if (retryLines.Count > maxRetry)
+                retryLines.RemoveRange(0, retryLines.Count - maxRetry);
+            // Rebuild richtextbox: header + retry section
+            string header = "Versi      : " + app_version + " - " + File.GetLastWriteTime(Application.ExecutablePath).ToString("dd/MM/yyyy HH:mm:ss") + "\n\n" +
+                "Sistem Info:\n" +
+                "  COM PORT   : " + comport + "\n" +
+                "  SV         : " + (val_sv / 10) + "\n" +
+                "  AL1.h Run  : " + (val_alarmOn / 10) + " | Stop: " + (val_alarmOff / 10) + "\n" +
+                "  Modbus     : " + (ModClient.Connected ? "Connected" : "Not Detected") + "\n" +
+                "  MQTT       : " + (mqClient != null && mqClient.IsConnected ? "Connected" : "Not Detected") + "\n\n" +
+                "Retry Koneksi:\n";
+            richTextBox_status.Text = header + string.Join("\n", retryLines) + "\n";
         }
 
         void mqrun_stop(byte id)
@@ -747,9 +764,9 @@ namespace steamboxV3._0
 
         private void btn_close_Click(object sender, EventArgs e)
         {
-            mqClient.Disconnect();
-            mqClient = null;
-            ModClient.Disconnect();
+            try { if (mqClient != null && mqClient.IsConnected) mqClient.Disconnect(); } catch { }
+            try { if (ModClient != null && ModClient.Connected) ModClient.Disconnect(); } catch { }
+            this.Close();
         }
 
         private bool isScanning = false;
@@ -776,7 +793,7 @@ namespace steamboxV3._0
             btn_scanSb.Enabled = false;
             btn_reconnect.Enabled = false;
             lbl_status.Text = "Sedang reconnect ke server MQTT...";
-            sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT reconnecting...");
+            retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT reconnecting...");
 
             try { if (mqClient != null && mqClient.IsConnected) mqClient.Disconnect(); } catch { }
             mqClient = null;
@@ -794,14 +811,14 @@ namespace steamboxV3._0
                         mqtt_sub();
                         this.Invoke(new Action(() => {
                             lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung";
-                            sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung");
+                            retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung");
                         }));
                     }
                     else
                     {
                         this.Invoke(new Action(() => {
                             lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal koneksi";
-                            sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal koneksi");
+                            retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal koneksi");
                         }));
                     }
                 }
@@ -809,13 +826,15 @@ namespace steamboxV3._0
                 {
                     this.Invoke(new Action(() => {
                         lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terjangkau";
-                        sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terjangkau");
+                        retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terjangkau");
                     }));
                 }
                 catch (Exception ex)
                 {
-                    this.Invoke(new Action(() =>
-                        lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT error: " + ex.Message));
+                    this.Invoke(new Action(() => {
+                        lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT error: " + ex.Message;
+                        retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT error");
+                    }));
                 }
             });
 

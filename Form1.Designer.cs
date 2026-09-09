@@ -50,6 +50,8 @@
             this.lbl_scan_info = new System.Windows.Forms.Label();
             this.lbl_reconnect_info = new System.Windows.Forms.Label();
             this.lbl_status = new System.Windows.Forms.Label();
+            this.btn_close = new System.Windows.Forms.Button();
+            this.lbl_close_info = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -6365,7 +6367,7 @@
             // btn_reconnect
             // 
             this.btn_reconnect.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_reconnect.Location = new System.Drawing.Point(110, 96);
+            this.btn_reconnect.Location = new System.Drawing.Point(220, 96);
             this.btn_reconnect.Name = "btn_reconnect";
             this.btn_reconnect.Size = new System.Drawing.Size(91, 35);
             this.btn_reconnect.TabIndex = 100;
@@ -6389,7 +6391,7 @@
             this.lbl_reconnect_info.AutoSize = true;
             this.lbl_reconnect_info.Font = new System.Drawing.Font("Roboto", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_reconnect_info.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.lbl_reconnect_info.Location = new System.Drawing.Point(110, 133);
+            this.lbl_reconnect_info.Location = new System.Drawing.Point(220, 133);
             this.lbl_reconnect_info.Name = "lbl_reconnect_info";
             this.lbl_reconnect_info.Size = new System.Drawing.Size(90, 13);
             this.lbl_reconnect_info.TabIndex = 102;
@@ -6405,6 +6407,28 @@
             this.lbl_status.Size = new System.Drawing.Size(120, 18);
             this.lbl_status.TabIndex = 103;
             this.lbl_status.Text = "";
+            // 
+            // btn_close
+            // 
+            this.btn_close.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_close.Location = new System.Drawing.Point(12, 168);
+            this.btn_close.Name = "btn_close";
+            this.btn_close.Size = new System.Drawing.Size(91, 35);
+            this.btn_close.TabIndex = 104;
+            this.btn_close.Text = "Close";
+            this.btn_close.UseVisualStyleBackColor = true;
+            this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
+            // 
+            // lbl_close_info
+            // 
+            this.lbl_close_info.AutoSize = true;
+            this.lbl_close_info.Font = new System.Drawing.Font("Roboto", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_close_info.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.lbl_close_info.Location = new System.Drawing.Point(12, 205);
+            this.lbl_close_info.Name = "lbl_close_info";
+            this.lbl_close_info.Size = new System.Drawing.Size(90, 13);
+            this.lbl_close_info.TabIndex = 105;
+            this.lbl_close_info.Text = "Tutup aplikasi";
             // 
             // richTextBox_status
             // 
@@ -6526,6 +6550,8 @@
             this.Controls.Add(this.lbl_scan_info);
             this.Controls.Add(this.lbl_reconnect_info);
             this.Controls.Add(this.lbl_status);
+            this.Controls.Add(this.btn_close);
+            this.Controls.Add(this.lbl_close_info);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.tableLayoutPanelHdr2);
@@ -6658,6 +6684,8 @@
         private System.Windows.Forms.Label lbl_scan_info;
         private System.Windows.Forms.Label lbl_reconnect_info;
         private System.Windows.Forms.Label lbl_status;
+        private System.Windows.Forms.Button btn_close;
+        private System.Windows.Forms.Label lbl_close_info;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
