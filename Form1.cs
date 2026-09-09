@@ -113,12 +113,17 @@ namespace steamboxV3._0
             richTextBox3.Text = "Action Log:\n";
             richTextBox4.Text = "Heartbeat Log:\n";
 
+            richTextBox_status.Text = "Sistem Status:\n";
             sb_append("Build Info:");
             sb_append("  Versi      : " + app_version);
             sb_append("  Build Time : " + File.GetLastWriteTime(Application.ExecutablePath).ToString("dd/MM/yyyy HH:mm:ss"));
-            sb_append("COM PORT: " + comport);
-            sb_append("SV: " + (val_sv / 10));
-            sb_append("AL1.h => Run: " + (val_alarmOn / 10) + ", Stop: " + (val_alarmOff / 10));
+            sb_append("");
+            sb_append("Sistem Info:");
+            sb_append("  COM PORT   : " + comport);
+            sb_append("  SV         : " + (val_sv / 10));
+            sb_append("  AL1.h Run  : " + (val_alarmOn / 10) + " | Stop: " + (val_alarmOff / 10));
+            sb_append("  Modbus     : " + (ModClient.Connected ? "Connected" : "Not Detected"));
+            sb_append("  MQTT       : " + (mqClient != null && mqClient.IsConnected ? "Connected" : "Not Detected"));
 
             try
             {
@@ -128,6 +133,7 @@ namespace steamboxV3._0
                 if (mqClient.IsConnected)
                 {
                     lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung";
+                    sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung");
                     // NOTE (FIX): hook the connection-lost event so we can auto-reconnect
                     // after the PC restarts / the broker drops the session.
                     mqClient.ConnectionClosed += MqttClient_ConnectionClosed;
@@ -139,6 +145,7 @@ namespace steamboxV3._0
             catch (MqttConnectionException)
             {
                 lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terdeteksi";
+                sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terdeteksi");
             }
 
             for (byte i = 1; i < data_pub.Length; i++)
@@ -228,8 +235,10 @@ namespace steamboxV3._0
 
             try
             {
-                this.Invoke(new Action(() =>
-                    lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT koneksi terputus, mencoba..."));
+                this.Invoke(new Action(() => {
+                    lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT koneksi terputus, mencoba...";
+                    sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT koneksi terputus, mencoba...");
+                }));
 
                 for (int attempt = 1; attempt <= 5; attempt++)
                 {
@@ -244,8 +253,10 @@ namespace steamboxV3._0
                             mqClient = newClient;
                             mqtt_sub();
 
-                            this.Invoke(new Action(() =>
-                                lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung kembali"));
+                            this.Invoke(new Action(() => {
+                                lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung kembali";
+                                sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung kembali");
+                            }));
                             return;
                         }
                     }
@@ -254,8 +265,10 @@ namespace steamboxV3._0
                     await Task.Delay(3000); // backoff between attempts
                 }
 
-                this.Invoke(new Action(() =>
-                    lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal (5 percobaan)"));
+                this.Invoke(new Action(() => {
+                    lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal (5 percobaan)";
+                    sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal (5 percobaan)");
+                }));
             }
             catch (Exception ex)
             {
@@ -492,7 +505,7 @@ namespace steamboxV3._0
 
         void sb_append(string text)
         {
-            const int maxLines = 15;
+            const int maxLines = 20;
             List<string> data = new List<string>();
             foreach (string l in richTextBox_status.Text.Split('\n'))
             {
@@ -763,6 +776,7 @@ namespace steamboxV3._0
             btn_scanSb.Enabled = false;
             btn_reconnect.Enabled = false;
             lbl_status.Text = "Sedang reconnect ke server MQTT...";
+            sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT reconnecting...");
 
             try { if (mqClient != null && mqClient.IsConnected) mqClient.Disconnect(); } catch { }
             mqClient = null;
@@ -778,19 +792,25 @@ namespace steamboxV3._0
                     {
                         mqClient.ConnectionClosed += MqttClient_ConnectionClosed;
                         mqtt_sub();
-                        this.Invoke(new Action(() =>
-                            lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung"));
+                        this.Invoke(new Action(() => {
+                            lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung";
+                            sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT terhubung");
+                        }));
                     }
                     else
                     {
-                        this.Invoke(new Action(() =>
-                            lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal koneksi"));
+                        this.Invoke(new Action(() => {
+                            lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal koneksi";
+                            sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT gagal koneksi");
+                        }));
                     }
                 }
                 catch (MqttConnectionException)
                 {
-                    this.Invoke(new Action(() =>
-                        lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terjangkau"));
+                    this.Invoke(new Action(() => {
+                        lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terjangkau";
+                        sb_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT tidak terjangkau");
+                    }));
                 }
                 catch (Exception ex)
                 {
