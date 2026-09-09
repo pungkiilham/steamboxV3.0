@@ -74,6 +74,19 @@ Update log for tracking changes to steamboxV3.0. Add new entries at the TOP of t
 - `app_version` / `changelog_id` (`Form1.cs`), `AssemblyVersion` / `AssemblyFileVersion`
   (`Properties/AssemblyInfo.cs`), and `UPDATE_LOG.md` heading bumped to **3.2.0**.
 
+### 9. Reconnect MQTT button + status feedback (`Form1.Designer.cs` + `Form1.cs`)
+- **What:** new `btn_reconnect` button placed to the right of the Scan button (at `(110, 96)`).
+  Clicking it safely disconnects the existing MQTT client, creates a fresh one, connects, and
+  subscribes to `sb/req`. Both buttons now show live status in `richTextBox_status`:
+  - Scan → `"Sedang scan SB..."`
+  - Reconnect → `"Sedang reconnect ke server MQTT..."`
+  Both buttons are disabled during their respective operations to prevent double-clicks.
+  Small italic helper labels (`lbl_scan_info` / `lbl_reconnect_info`) below each button
+  explain the function in Bahasa Indonesia.
+- **Why:** when Windows starts before WiFi is available, the initial MQTT connection fails and
+  never retries (auto-reconnect only fires on drops, not initial failures). The Reconnect
+  button lets the operator retry without restarting the app.
+
 ---
 
 ## 2026-08-08 — v3.1.2 — FIX: stale resep/durasi + MQTT robustness + version info

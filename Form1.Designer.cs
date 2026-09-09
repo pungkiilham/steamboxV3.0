@@ -46,6 +46,9 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.btn_scanSb = new System.Windows.Forms.Button();
+            this.btn_reconnect = new System.Windows.Forms.Button();
+            this.lbl_scan_info = new System.Windows.Forms.Label();
+            this.lbl_reconnect_info = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -6358,6 +6361,39 @@
             this.btn_scanSb.UseVisualStyleBackColor = true;
             this.btn_scanSb.Click += new System.EventHandler(this.btn_scanSb_Click);
             // 
+            // btn_reconnect
+            // 
+            this.btn_reconnect.Font = new System.Drawing.Font("Roboto Cn", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_reconnect.Location = new System.Drawing.Point(110, 96);
+            this.btn_reconnect.Name = "btn_reconnect";
+            this.btn_reconnect.Size = new System.Drawing.Size(91, 35);
+            this.btn_reconnect.TabIndex = 100;
+            this.btn_reconnect.Text = "Reconnect";
+            this.btn_reconnect.UseVisualStyleBackColor = true;
+            this.btn_reconnect.Click += new System.EventHandler(this.btn_reconnect_Click);
+            // 
+            // lbl_scan_info
+            // 
+            this.lbl_scan_info.AutoSize = true;
+            this.lbl_scan_info.Font = new System.Drawing.Font("Roboto", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_scan_info.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.lbl_scan_info.Location = new System.Drawing.Point(12, 133);
+            this.lbl_scan_info.Name = "lbl_scan_info";
+            this.lbl_scan_info.Size = new System.Drawing.Size(90, 13);
+            this.lbl_scan_info.TabIndex = 101;
+            this.lbl_scan_info.Text = "Scan SB yang aktif";
+            // 
+            // lbl_reconnect_info
+            // 
+            this.lbl_reconnect_info.AutoSize = true;
+            this.lbl_reconnect_info.Font = new System.Drawing.Font("Roboto", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_reconnect_info.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.lbl_reconnect_info.Location = new System.Drawing.Point(110, 133);
+            this.lbl_reconnect_info.Name = "lbl_reconnect_info";
+            this.lbl_reconnect_info.Size = new System.Drawing.Size(90, 13);
+            this.lbl_reconnect_info.TabIndex = 102;
+            this.lbl_reconnect_info.Text = "Coba koneksi ulang ke server MQTT";
+            // 
             // richTextBox_status
             // 
             this.richTextBox_status.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -6474,6 +6510,9 @@
             this.ClientSize = new System.Drawing.Size(1836, 964);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btn_scanSb);
+            this.Controls.Add(this.btn_reconnect);
+            this.Controls.Add(this.lbl_scan_info);
+            this.Controls.Add(this.lbl_reconnect_info);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.tableLayoutPanelHdr2);
@@ -6602,6 +6641,9 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Button btn_scanSb;
+        private System.Windows.Forms.Button btn_reconnect;
+        private System.Windows.Forms.Label lbl_scan_info;
+        private System.Windows.Forms.Label lbl_reconnect_info;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

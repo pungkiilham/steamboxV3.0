@@ -734,11 +734,63 @@ namespace steamboxV3._0
             if (isScanning) return;
             isScanning = true;
             btn_scanSb.Enabled = false;
+            btn_reconnect.Enabled = false;
+            richTextBox_status.AppendText("Sedang scan SB...\n");
 
             await Task.Run(() => scan_sb());
 
             btn_scanSb.Enabled = true;
+            btn_reconnect.Enabled = true;
             isScanning = false;
+        }
+
+        private bool isReconnecting = false;
+        private async void btn_reconnect_Click(object sender, EventArgs e)
+        {
+            if (isReconnecting) return;
+            isReconnecting = true;
+            btn_scanSb.Enabled = false;
+            btn_reconnect.Enabled = false;
+            richTextBox_status.AppendText("Sedang reconnect ke server MQTT...\n");
+
+            try { if (mqClient != null && mqClient.IsConnected) mqClient.Disconnect(); } catch { }
+            mqClient = null;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    mqClient = new MqttClient(ip, 1884, false, null, null, MqttSslProtocols.TLSv1_2);
+                    mqClient.Connect(mqttClientId, user, pass);
+
+                    if (mqClient.IsConnected)
+                    {
+                        mqClient.ConnectionClosed += MqttClient_ConnectionClosed;
+                        mqtt_sub();
+                        this.Invoke(new Action(() =>
+                            richTextBox_status.AppendText("MQTT_Server Connected\n")));
+                    }
+                    else
+                    {
+                        this.Invoke(new Action(() =>
+                            richTextBox_status.AppendText("MQTT_Server Gagal Koneksi\n")));
+                    }
+                }
+                catch (MqttConnectionException)
+                {
+                    this.Invoke(new Action(() =>
+                        richTextBox_status.AppendText("MQTT_Server Tidak Terjangkau\n")));
+                }
+                catch (Exception ex)
+                {
+                    this.Invoke(new Action(() =>
+                        richTextBox_status.AppendText("MQTT_Server Error: " + ex.Message + "\n")));
+                }
+            });
+
+            btn_scanSb.Enabled = true;
+            btn_reconnect.Enabled = true;
+            isReconnecting = false;
         }
         // Shared Run/Stop handler for all 30 steambox units.
         // Each btn_statusN button carries its unit id in its Tag (set in the Designer).
