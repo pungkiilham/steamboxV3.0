@@ -178,7 +178,6 @@ namespace steamboxV3._0
                 lbl_status.Visible = true;
                 lbl_status.Text = "Sedang scan SB...";
                 scan_sb();
-                lbl_status.Visible = false;
             }
             catch (System.IO.IOException e)
             {
@@ -678,6 +677,10 @@ namespace steamboxV3._0
                 for (byte i = 1; i < sbmax; i++) {
                     ProcessSteambox(i);
                 }
+                btn_scanSb.Enabled = true;
+                btn_reconnect.Enabled = true;
+                isScanning = false;
+                lbl_status.Visible = false;
             }));
         }
 
@@ -781,7 +784,7 @@ namespace steamboxV3._0
         }
 
         private bool isScanning = false;
-        private async void btn_scanSb_Click(object sender, EventArgs e)
+        private void btn_scanSb_Click(object sender, EventArgs e)
         {
             if (isScanning) return;
             isScanning = true;
@@ -789,13 +792,7 @@ namespace steamboxV3._0
             btn_reconnect.Enabled = false;
             lbl_status.Visible = true;
             lbl_status.Text = "Sedang scan SB...";
-
-            await Task.Run(() => scan_sb());
-
-            btn_scanSb.Enabled = true;
-            btn_reconnect.Enabled = true;
-            isScanning = false;
-            lbl_status.Visible = false;
+            scan_sb();
         }
 
         private bool isReconnecting = false;
