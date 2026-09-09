@@ -175,11 +175,15 @@ namespace steamboxV3._0
                 ModClient.Connect();
                 timer1.Start();
                 retry_append("Modbus_Client Connected");
+                lbl_status.Visible = true;
+                lbl_status.Text = "Sedang scan SB...";
                 scan_sb();
+                lbl_status.Visible = false;
             }
             catch (System.IO.IOException e)
             {
                 retry_append("Modbus_Client Not Detected");
+                lbl_status.Visible = false;
                 timer1.Stop();
             }
 
@@ -234,6 +238,7 @@ namespace steamboxV3._0
             {
                 if (this.IsHandleCreated)
                     this.Invoke(new Action(() => {
+                        lbl_status.Visible = true;
                         lbl_status.Text = DateTime.Now.ToString("HH:mm:ss") + " MQTT koneksi terputus, mencoba...";
                         retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT reconnecting...");
                     }));
@@ -279,6 +284,8 @@ namespace steamboxV3._0
             finally
             {
                 isMqttReconnecting = false;
+                if (this.IsHandleCreated)
+                    this.Invoke(new Action(() => lbl_status.Visible = false));
             }
         }
 
@@ -780,6 +787,7 @@ namespace steamboxV3._0
             isScanning = true;
             btn_scanSb.Enabled = false;
             btn_reconnect.Enabled = false;
+            lbl_status.Visible = true;
             lbl_status.Text = "Sedang scan SB...";
 
             await Task.Run(() => scan_sb());
@@ -787,6 +795,7 @@ namespace steamboxV3._0
             btn_scanSb.Enabled = true;
             btn_reconnect.Enabled = true;
             isScanning = false;
+            lbl_status.Visible = false;
         }
 
         private bool isReconnecting = false;
@@ -796,6 +805,7 @@ namespace steamboxV3._0
             isReconnecting = true;
             btn_scanSb.Enabled = false;
             btn_reconnect.Enabled = false;
+            lbl_status.Visible = true;
             lbl_status.Text = "Sedang reconnect ke server MQTT...";
             retry_append(DateTime.Now.ToString("HH:mm:ss") + " MQTT reconnecting...");
 
@@ -845,6 +855,7 @@ namespace steamboxV3._0
             btn_scanSb.Enabled = true;
             btn_reconnect.Enabled = true;
             isReconnecting = false;
+            lbl_status.Visible = false;
         }
         // Shared Run/Stop handler for all 30 steambox units.
         // Each btn_statusN button carries its unit id in its Tag (set in the Designer).

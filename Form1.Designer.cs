@@ -6407,6 +6407,7 @@
             this.lbl_status.Size = new System.Drawing.Size(120, 18);
             this.lbl_status.TabIndex = 103;
             this.lbl_status.Text = "";
+            this.lbl_status.Visible = false;
             // 
             // btn_close
             // 
